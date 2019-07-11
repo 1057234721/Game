@@ -95,6 +95,7 @@ class Cracker(threading.Thread):
                 if template == './Onmyoji_images\\battle_victory.png':
                     ThunderController.random_sleep(3, 4)
                     count += 1
+                    ThunderController.speak("begin" + str(count) + "battle")
                 ThunderController.touch(self.index, ThunderController.cheat(location))
 
     # def break_through(self):
@@ -198,6 +199,7 @@ class Cracker(threading.Thread):
         result = int(result[:-2])
         ticket = result
         while True:
+            ThunderController.speak("there are " + str(ticket) + "left")
             print('have ', ticket, 'tickets')
             if ticket <= 2:
                 break
@@ -416,12 +418,12 @@ class Cracker(threading.Thread):
 def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', time.ctime())) + '_log.txt')
     c0 = Cracker(0, [['accept_invite']], Onmyoji())
-    c1 = Cracker(1, [['accept_invite']])
-    c2 = Cracker(2, [['accept_invite', False]])
-    c0.start()
-    c1.start()
-    c2.start()
-    # c0.break_through()
+    # c1 = Cracker(1, [['accept_invite']])
+    # c2 = Cracker(2, [['accept_invite', False]])
+    # c0.start()
+    # c1.start()
+    # c2.start()
+    c0.break_through()
     # c0.chapter_solo()
 
 

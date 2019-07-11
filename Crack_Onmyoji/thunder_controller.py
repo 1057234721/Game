@@ -358,7 +358,7 @@ class ThunderController:
     # fetch the number (str) from the picture by using the api, must be png format
     @staticmethod
     def fetch_number_from_picture(path: str) -> str:
-        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/numbers?" + ThunderController.api
+        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/numbers?access_token=" + ThunderController.api
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -375,7 +375,7 @@ class ThunderController:
     # fetch the string (str) from the picture by using the api, must be png format
     @staticmethod
     def fetch_string_from_picture(path: str) -> str:
-        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?" + ThunderController.api
+        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + ThunderController.api
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -417,7 +417,6 @@ class ThunderController:
     @staticmethod
     def speak(word: str) -> None:
         ThunderController.speak_out.Speak(word)
-        winsound.PlaySound(word, winsound.SND_ASYNC)
 
     # click different location to avoid game detection
     @staticmethod
