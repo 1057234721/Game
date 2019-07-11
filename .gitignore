@@ -1,0 +1,8 @@
+.idea
+logs
+instruction
+*/__pycache__
+__pycache__
+Crack_Onmyoji/Onmyoji_images/*_scr.png
+Crack_Onmyoji/Onmyoji_images/*intercepted_picture.png
+Crack_Onmyoji/Onmyoji_images/.rc
