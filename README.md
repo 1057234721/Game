@@ -42,5 +42,5 @@ re
 1. add more functions
 2. add gui (maybe xd)
 # Disclaimer
-阴阳师™ (Onmyoji) is a brand which belongs to NetEase™ corporation (网易(杭州)网络有限公司).  
-雷电模拟器™ (Thunder Android Simulator) is a brand which belongs to Shanghai Changzhi Internet Technology corporation (上海畅指网络科技有限公司).  
+阴阳师™ (Onmyoji) is a brand which belongs to NetEase™ Corporation (网易(杭州)网络有限公司).  
+雷电模拟器™ (Thunder Android Simulator) is a brand which belongs to Shanghai Changzhi Internet Technology Corporation (上海畅指网络科技有限公司).  
