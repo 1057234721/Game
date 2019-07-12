@@ -1,5 +1,10 @@
 # Game
 Python Script to free hand on playing Onmyoji
+# Description
+Use opencv to detect the template pictures in the screen shot of the simulator, and then make some actions according to user's demand.  
+Baidu OCR API is an auxiliary approach to help detect the numbers of some perticular loctions of the screen shot.  
+In all, the goal is to free your hand on the tedious operations.  
+Multithreading is supported, which means you can open as much players as your can and them run them in whatever team mode or solo mode in the same time.  
 # Platform
 Windows 10 x86_64 (Only tested on this)
 # Software
@@ -18,8 +23,16 @@ re
 		+ old (Deprecated)
 		+ Onmyoji_images (Match template pictures)
 		+ test (For test)
-		+ crack_onmyoji.py (Code entry)
-		+ log_recorder.py (Write log)
-		+ onmyoji.py (Onmyoji class, stores some in-game properties)
-		+ thunder_controller.py (Action level)
-		+ thunder_player.py (Player class) 
+		+ crack_onmyoji.py (Code entry, highest level)
+		+ log_recorder.py (Write log, util)
+		+ onmyoji.py (Onmyoji class to store some global in-game properties and account info)
+		+ thunder_controller.py (service, action level)
+		+ thunder_player.py (Player class to store player info) 
+# Functionality
+1. Awakening and Mitama automation in team mode  
+2. Original Fire (bad translation xd) automation in solo mode  
+3. Personal Breakthrough automaton  
+4. Chapter automation in solo mode
+# Developing Plan
+1. add more functions
+2. add gui (maybe xd)
