@@ -214,6 +214,7 @@ class Cracker(threading.Thread):
                         print("already beat 3 players")
                         ticket -= 3
                         refresh = True
+                        ThunderController.random_sleep(3, 4)
                 ThunderController.touch(self.index, ThunderController.cheat(location))
                 ThunderController.random_sleep()
             screen = ThunderController.screen_shot(self.index)
@@ -232,6 +233,7 @@ class Cracker(threading.Thread):
                             print("already beat 3 players")
                             ticket -= 3
                             refresh = True
+                            ThunderController.random_sleep(3, 4)
                     ThunderController.touch(self.index, ThunderController.cheat(location))
                     ThunderController.random_sleep()
                 screen = ThunderController.screen_shot(self.index)
@@ -419,12 +421,12 @@ class Cracker(threading.Thread):
 def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', time.ctime())) + '_log.txt')
     c0 = Cracker(0, [['accept_invite']], Onmyoji())
-    c1 = Cracker(1, [['accept_invite']])
-    c2 = Cracker(2, [['accept_invite', False]])
-    c0.start()
-    c1.start()
-    c2.start()
-    # c0.break_through()
+    # c1 = Cracker(1, [['accept_invite', False]])
+    # c2 = Cracker(2, [['accept_invite', False]])
+    # c0.start()
+    # c1.start()
+    # c2.start()
+    c0.break_through()
     # c0.chapter_solo()
 
 
