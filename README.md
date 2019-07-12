@@ -11,15 +11,15 @@ numpy
 re  
 (for more detail please check the source code)
 # Code Structure
----Game  
-///---Crack_Onmyoji  
-*logs (Store logs)  
-*instruction ( config.txt is required to store Baidu OCR API Key)  
-*old (Deprecated)  
-*Onmyoji_images (Match template pictures)  
-*test (For test)  
-*crack_onmyoji.py  
-*log_recorder.py  
-*onmyoji.py  
-*thunder_controller.py  
-*thunder_player.py  
++ Game
+	+ Crack_Onmyoji
+		+ logs (Store logs)
+		+ instruction ( config.txt is required to store Baidu OCR API Key)
+		+ old (Deprecated)
+		+ Onmyoji_images (Match template pictures)
+		+ test (For test)
+		+ crack_onmyoji.py (Code entry)
+		+ log_recorder.py (Write log)
+		+ onmyoji.py (Onmyoji class, stores some in-game properties)
+		+ thunder_controller.py (Action level)
+		+ thunder_player.py (Player class) 
