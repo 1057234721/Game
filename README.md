@@ -15,6 +15,11 @@ opencv
 numpy  
 re  
 (for more detail please check the source code)
+# Configuration
+1.modify every Thunder Android Simulator's resolution to 1280 x 720.  
+2.modify every Thunder Android Simulator's share path to the project's Onmyoji_images.  
+3.modify ld.exe, ldconsole.exe path and share path in the thunder_controllor.py.  
+4.create your own Baidu OCR API access_token and put it in the config section, under instruction/config.txt.  
 # Code Structure
 + Game
 	+ Crack_Onmyoji
