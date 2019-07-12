@@ -8,7 +8,6 @@ import time
 import cv2
 import numpy
 import requests
-import winsound
 import win32com.client
 
 from Crack_Onmyoji.onmyoji import Onmyoji
