@@ -4,7 +4,7 @@ Python Script to free hand on playing Onmyoji
 Use opencv to detect the template pictures in the screen shot of the simulator, and then make some actions according to user's demand.  
 Baidu OCR API is an auxiliary approach to help detect the numbers of some perticular loctions of the screen shot.  
 In all, the goal is to free your hand on the tedious operations.  
-Multithreading is supported, which means you can open as much players as your can and them run them in whatever team mode or solo mode in the same time.  
+Multithreading is supported, which means you can open as much players as your can and then run them in whatever team mode or solo mode in the same time.  
 # Platform
 Windows 10 x86_64 (Only tested on this)
 # Software
