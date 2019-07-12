@@ -26,7 +26,7 @@ re
 		+ crack_onmyoji.py (Code entry, highest level)
 		+ log_recorder.py (Write log, util)
 		+ onmyoji.py (Onmyoji class to store some global in-game properties and account info)
-		+ thunder_controller.py (service, action level)
+		+ thunder_controller.py (Service, action level)
 		+ thunder_player.py (Player class to store player info) 
 # Functionality
 1. Awakening and Mitama automation in team mode  
