@@ -199,7 +199,6 @@ class Cracker(threading.Thread):
         result = int(result[:-2])
         ticket = result
         while True:
-            ThunderController.speak(str(ticket))
             print('have ', ticket, 'tickets')
             if ticket <= 2:
                 break
