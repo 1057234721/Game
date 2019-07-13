@@ -25,7 +25,7 @@ re
 + Game
 	+ Crack_Onmyoji
 		+ logs (Store logs)
-		+ instruction ( config.txt is required to store Baidu OCR API Key)
+		+ instruction (Config.txt is required to store Baidu OCR API Key)
 		+ old (Deprecated)
 		+ Onmyoji_images (Match template pictures)
 		+ test (For test)
