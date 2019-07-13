@@ -303,7 +303,7 @@ class Cracker(threading.Thread):
                     print('need to sleep... ', sleep_time)
                     ThunderController.random_sleep(sleep_time, sleep_time + 10)
 
-    def original_fire(self):
+    def original_fire_and_imperial_spirit(self):
         while True:
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
@@ -424,13 +424,14 @@ class Cracker(threading.Thread):
 def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', time.ctime())) + '_log.txt')
     c0 = Cracker(0, [['accept_invite']], Onmyoji())
-    # c1 = Cracker(1, [['accept_invite', False]])
+    # c1 = Cracker(1, [['accept_invite']])
     # c2 = Cracker(2, [['accept_invite', False]])
     # c0.start()
     # c1.start()
     # c2.start()
-    c0.break_through()
+    # c0.break_through()
     # c0.chapter_solo()
+    c0.original_fire_and_imperial_spirit()
 
 
 if __name__ == '__main__':
