@@ -293,8 +293,12 @@ class Cracker(threading.Thread):
                         Onmyoji.break_through_sleep_left_up,
                         Onmyoji.break_through_sleep_right_down)
                     result = ThunderController.fetch_number_from_picture(sleep_time)
-                    minute = int(result[:2])
-                    second = int(result[2:])
+                    if len(result) >= 4:
+                        minute = int(result[:2])
+                        second = int(result[2:])
+                    else:
+                        minute = 0
+                        second = 0
                     sleep_time = 60 * minute + second
                     print('need to sleep... ', sleep_time)
                     ThunderController.random_sleep(sleep_time, sleep_time + 10)
