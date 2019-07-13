@@ -303,7 +303,7 @@ class Cracker(threading.Thread):
                     print('need to sleep... ', sleep_time)
                     ThunderController.random_sleep(sleep_time, sleep_time + 10)
 
-    def original_fire_and_imperial_spirit(self):
+    def solo_mode(self):
         while True:
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
@@ -431,7 +431,7 @@ def main():
     # c2.start()
     # c0.break_through()
     # c0.chapter_solo()
-    c0.original_fire_and_imperial_spirit()
+    c0.solo_mode()
 
 
 if __name__ == '__main__':
