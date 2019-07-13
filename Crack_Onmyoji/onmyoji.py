@@ -3,7 +3,7 @@ import glob
 
 class Onmyoji:
     left_up_position = (0, 0)
-    right_down_position = (960, 540)
+    right_down_position = (1280, 720)
     invite = glob.glob(r'./Onmyoji_images/*_invite.png')
     victory = glob.glob(r'./Onmyoji_images/*_victory.png')
     close = glob.glob(r'./Onmyoji_images/*close.png')
