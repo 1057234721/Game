@@ -36,7 +36,7 @@ re
 		+ thunder_player.py (Player class to store player info) 
 # Functionality
 1. Awakening and Mitama automation in team mode  
-2. Original Fire and Imperial spirit (bad translation xd) automation in solo mode  
+2. Original Fire, Mitama and Imperial spirit (bad translation xd) automation in solo mode  
 3. Personal Breakthrough automaton  
 4. Chapter automation in solo mode
 # Developing Plan
