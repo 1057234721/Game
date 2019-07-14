@@ -425,11 +425,3 @@ class ThunderController:
         r_x, r_y = random.randint(-r_w, r_w), random.randint(-r_h, r_h)
         x, y = x + r_x, y + r_y
         return x, y
-
-
-sleep_time = ThunderController.intercept_rectangle_from_picture(
-    0,
-    Onmyoji.break_through_sleep_left_up,
-    Onmyoji.break_through_sleep_right_down)
-result = ThunderController.fetch_number_from_picture(sleep_time)
-print(result)
