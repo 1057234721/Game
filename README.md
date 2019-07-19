@@ -1,5 +1,5 @@
 # Game
-Python Script to free hand on playing Onmyoji
+Python Script to free hand on playing Onmyoji (YYS, 阴阳师)
 # Features
 1.Use opencv to detect the template pictures in the screen shot of the simulator, and then make some actions according to user's demand.  
 2.By Using Thunder Android Simulator's ld and ldconsole api, users can run the script and players in background.  
