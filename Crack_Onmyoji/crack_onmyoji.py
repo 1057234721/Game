@@ -424,17 +424,17 @@ class Cracker(threading.Thread):
 def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', time.ctime())) + '_log.txt')
     c0 = Cracker(0, [['accept_invite']], Onmyoji())
-    c1 = Cracker(1, [['accept_invite', False]])
-    # c2 = Cracker(2, [['accept_invite', False]])
+    c1 = Cracker(1, [['accept_invite']])
+    c2 = Cracker(2, [['accept_invite', False]])
     # c3 = Cracker(3, [['accept_invite', False]])
-    # c0.start()
-    # c1.start()
-    # c2.start()
+    c0.start()
+    c1.start()
+    c2.start()
     # c3.start()
     # c3.chapter_solo()
     # c0.chapter_solo()
     # c0.solo_mode()
-    c0.break_through()
+    # c0.break_through()
 
 
 if __name__ == '__main__':
