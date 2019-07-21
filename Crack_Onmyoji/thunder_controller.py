@@ -405,7 +405,6 @@ class ThunderController:
                      right_down: (int, int) = Onmyoji.right_down_position) -> str:
         x = random.uniform(left_up[0], right_down[0])
         y = random.uniform(left_up[1], right_down[1])
-        print('random click ', x, y)
         return ThunderController.touch(index, (x, y))
 
     # random sleep to avoid detection
