@@ -38,7 +38,8 @@ re
 1. Awakening and Mitama automation in team mode  
 2. Awakening, Mitama, Original Fire and Imperial spirit (bad translation xd) automation in solo mode  
 3. Personal Breakthrough automaton  
-4. Chapter automation in solo mode
+4. Chapter automation in solo mode  
+5. Hundred Ghosts in dummy version, which means it random clicks. AI version is in training and testing.
 # Developing Plan
 1. add more functions
 2. add gui (maybe xd)
