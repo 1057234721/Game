@@ -421,9 +421,19 @@ class Cracker(threading.Thread):
                     break
 
     def hundred_ghosts(self):
-        while True:
+        ticket = ThunderController.intercept_rectangle_from_picture(self.index,
+                                                                    Onmyoji.hundred_ghosts_ticket_left_up,
+                                                                    Onmyoji.hundred_ghosts_ticket_right_down)
+        result = ThunderController.fetch_number_from_picture(ticket)
+        result = int(result)
+        ticket = result
+        while ticket > 0:
+            print('have ', ticket, ' tickets')
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.hundred_ghosts)
             if exist:
+                if template == './Onmyoji_images\\enter_hundred_ghosts.png':
+                    ticket -= 1
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
                 if template == './Onmyoji_images\\begin_hundred_ghosts.png':
                     choose_pool = [(Onmyoji.hundred_ghosts_choose_king_first_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_first_right_down),

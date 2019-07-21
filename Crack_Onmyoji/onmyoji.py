@@ -41,6 +41,8 @@ class Onmyoji:
     hundred_ghosts_throw_height = (300, 450)
     hundred_ghosts_drag_width = (420, 480)
     hundred_ghosts_drag_height = (0, 720)
+    hundred_ghosts_ticket_left_up = (788, 517)
+    hundred_ghosts_ticket_right_down = (841, 545)
 
     @staticmethod
     def get_user_name_by_index(index: int) -> str:
