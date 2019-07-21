@@ -467,7 +467,8 @@ class Cracker(threading.Thread):
                                 ThunderController.random_click(self.index, *area_locations)
                                 ThunderController.random_sleep(0.4, 0.6)
                         ThunderController.random_click(self.index, *area_locations)
-                ThunderController.touch(self.index, ThunderController.cheat(location))
+                else:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
 
 
 def main():
