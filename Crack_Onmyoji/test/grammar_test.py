@@ -140,3 +140,4 @@ from Crack_Onmyoji.onmyoji import Onmyoji
 #     ((i * 180, Onmyoji.hundred_ghosts_throw_height[0]), ((i + 1) * 180, Onmyoji.hundred_ghosts_throw_height[1])) for i
 #     in range(6)]
 # print(throw_pool)
+print(time.strftime("%Y %m %d %H:%M:%S", time.localtime()))

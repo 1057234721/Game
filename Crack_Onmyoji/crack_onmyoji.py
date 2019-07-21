@@ -462,7 +462,7 @@ class Cracker(threading.Thread):
                         area_locations = throw_pool[random_area]
                         on_fire = random.uniform(0, 1) >= 0.8
                         if on_fire:
-                            for i in range(4):
+                            for i in range(3):
                                 print('on fire ', i)
                                 ThunderController.random_click(self.index, *area_locations)
                                 ThunderController.random_sleep(0.4, 0.6)
@@ -471,7 +471,8 @@ class Cracker(threading.Thread):
 
 
 def main():
-    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', time.ctime())) + '_log.txt')
+    run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
+    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     c0 = Cracker(0, [['accept_invite']], Onmyoji())
     c1 = Cracker(1, [['accept_invite']])
     c2 = Cracker(2, [['accept_invite', False]])
