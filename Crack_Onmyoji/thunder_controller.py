@@ -242,9 +242,9 @@ class ThunderController:
 
     # use ld_cmd to make screen shot and return the path of the picture, assuming the player is running
     @staticmethod
-    def screen_shot(index: int) -> str:
+    def screen_shot(index: int, sleep_time_low: float = 0.4, sleep_time_high: float = 0.6) -> str:
         ThunderController.ld_cmd(index, 'screencap -p /sdcard/Pictures/' + str(index) + 'apk_scr.png')
-        ThunderController.random_sleep(0.4, 0.6)
+        ThunderController.random_sleep(sleep_time_low, sleep_time_high)
         return ThunderController.share_path + '/' + str(index) + 'apk_scr.png'
 
     # find the matched picture, assuming the player is running
@@ -323,11 +323,12 @@ class ThunderController:
 
     # wait for specified picture, assuming the player is running
     @staticmethod
-    def wait_picture(index: int, timeout: int, template: str, threshold: float = 0.85) -> \
-            (bool, (int, int, int, int)):
+    def wait_picture(index: int, timeout: int, template: str, threshold: float = 0.85, sleep_time_low: float = 0.4,
+                     sleep_time_high: float = 0.6) -> (bool, (int, int, int, int)):
+
         count = 0
         while count < timeout:
-            screen = ThunderController.screen_shot(index)
+            screen = ThunderController.screen_shot(index, sleep_time_low, sleep_time_high)
             print(str(index), ' is waiting... ', template)
             location = ThunderController.find_single_picture(screen, template, threshold)
             if location is None:
@@ -342,9 +343,9 @@ class ThunderController:
     # check the current screen for the pattern picture list, if there exists, then return it.
     # if there exist many pattern pictures then return the first one, assuming the player is running
     @staticmethod
-    def check_picture_list(index: int, templates: list, threshold: float = 0.85) -> \
-            (bool, (int, int, int, int), str):
-        screen = ThunderController.screen_shot(index)
+    def check_picture_list(index: int, templates: list, threshold: float = 0.85, sleep_time_low: float = 0.4,
+                           sleep_time_high: float = 0.6) -> (bool, (int, int, int, int), str):
+        screen = ThunderController.screen_shot(index, sleep_time_low, sleep_time_high)
         for template_index, template in enumerate(templates):
             print(str(index), ' is checking... ', template)
             location = ThunderController.find_single_picture(screen, template, threshold)
@@ -404,6 +405,7 @@ class ThunderController:
                      right_down: (int, int) = Onmyoji.right_down_position) -> str:
         x = random.uniform(left_up[0], right_down[0])
         y = random.uniform(left_up[1], right_down[1])
+        print('random click ', x, y)
         return ThunderController.touch(index, (x, y))
 
     # random sleep to avoid detection

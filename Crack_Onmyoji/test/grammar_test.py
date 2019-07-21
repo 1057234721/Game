@@ -130,5 +130,13 @@ import configparser
 #
 #
 # speak_word('hello')
+from Crack_Onmyoji.onmyoji import Onmyoji
 
-
+old_time = time.time()
+time.sleep(1)
+second_time = time.time()
+print(second_time - old_time)
+throw_pool = [
+    ((i * 180, Onmyoji.hundred_ghosts_throw_height[0]), ((i + 1) * 180, Onmyoji.hundred_ghosts_throw_height[1])) for i
+    in range(6)]
+print(throw_pool)
