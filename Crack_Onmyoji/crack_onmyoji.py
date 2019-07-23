@@ -420,12 +420,73 @@ class Cracker(threading.Thread):
                             ThunderController.touch(self.index, ThunderController.cheat(location))
                     break
 
+    def hundred_ghosts(self):
+        ticket = ThunderController.intercept_rectangle_from_picture(self.index,
+                                                                    Onmyoji.hundred_ghosts_ticket_left_up,
+                                                                    Onmyoji.hundred_ghosts_ticket_right_down)
+        result = ThunderController.fetch_number_from_picture(ticket)
+        result = int(result)
+        ticket = result
+        while ticket > 0:
+            print('have ', ticket, ' tickets')
+            exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.hundred_ghosts)
+            if exist:
+                if template == './Onmyoji_images\\enter_hundred_ghosts.png':
+                    ticket -= 1
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                if template == './Onmyoji_images\\begin_hundred_ghosts.png':
+                    choose_pool = [(Onmyoji.hundred_ghosts_choose_king_first_left_up,
+                                    Onmyoji.hundred_ghosts_choose_king_first_right_down),
+                                   (Onmyoji.hundred_ghosts_choose_king_second_left_up,
+                                    Onmyoji.hundred_ghosts_choose_king_second_right_down),
+                                   (Onmyoji.hundred_ghosts_choose_king_third_left_up,
+                                    Onmyoji.hundred_ghosts_choose_king_third_right_down)]
+                    random_king = random.randint(0, 2)
+                    king_locations = choose_pool[random_king]
+                    ThunderController.random_click(self.index, *king_locations)
+                    ThunderController.random_sleep()
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                    ThunderController.random_sleep(1.5, 2)
+                    exist, location = ThunderController.wait_picture(self.index, 1,
+                                                                     ThunderController.share_path
+                                                                     + '/five_ghosts.png')
+                    if exist:
+                        height = random.randint(*Onmyoji.hundred_ghosts_drag_height)
+                        width = random.randint(*Onmyoji.hundred_ghosts_drag_width)
+                        drag_time = random.randint(1000, 2000)
+                        ThunderController.swipe(self.index, location,
+                                                (width, height), drag_time)
+                        ThunderController.random_sleep(0.4, 0.6)
+                    low_high = Onmyoji.hundred_ghosts_throw_height
+                    throw_pool = [((i * 180, low_high[0]), ((i + 1) * 180, low_high[1])) for i in range(1, 5)]
+                    begin_time = time.time()
+                    while True:
+                        current_time = time.time()
+                        if current_time - begin_time >= 40:
+                            ThunderController.random_sleep()
+                            exist, _, _ = ThunderController.check_picture_list(self.index, Onmyoji.hundred_ghosts)
+                            if exist:
+                                break
+                        ThunderController.random_sleep(0.4, 0.8)
+                        random_area = random.randint(0, 3)
+                        area_locations = throw_pool[random_area]
+                        on_fire = random.uniform(0, 1) >= 0.8
+                        if on_fire:
+                            for i in range(3):
+                                print('on fire ', i)
+                                ThunderController.random_click(self.index, *area_locations)
+                                ThunderController.random_sleep(0.4, 0.6)
+                        ThunderController.random_click(self.index, *area_locations)
+                else:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+
 
 def main():
-    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', time.ctime())) + '_log.txt')
+    run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
+    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     c0 = Cracker(0, [['accept_invite']], Onmyoji())
-    c1 = Cracker(1, [['accept_invite', False]])
-    # c2 = Cracker(2, [['accept_invite', False]])
+    c1 = Cracker(1, [['accept_invite']])
+    c2 = Cracker(2, [['accept_invite', False]])
     # c3 = Cracker(3, [['accept_invite', False]])
     # c0.start()
     # c1.start()
@@ -434,7 +495,8 @@ def main():
     # c3.chapter_solo()
     # c0.chapter_solo()
     # c0.solo_mode()
-    c0.break_through()
+    # c0.break_through()
+    c2.hundred_ghosts()
 
 
 if __name__ == '__main__':

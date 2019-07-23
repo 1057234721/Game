@@ -13,6 +13,7 @@ class Onmyoji:
     game_video_activity_name = "com.netease.onmyoji/.VideoPlayer"
     player = ["player_master", "player_attendant_one", "player_attendant_two"]
     champion_class = glob.glob(r'./Onmyoji_images/*class.png')
+    hundred_ghosts = glob.glob(r'./Onmyoji_images/*_hundred_ghosts.png')
     chapter_drag_height = (120, 140)
     chapter_drag_left = (100, 200)
     chapter_drag_right = (1080, 1180)
@@ -31,6 +32,17 @@ class Onmyoji:
     break_through_sleep_right_down = (1125, 561)
     break_through_ticket_left_up = (409, 605)
     break_through_ticket_right_down = (487, 639)
+    hundred_ghosts_choose_king_first_left_up = (220, 450)
+    hundred_ghosts_choose_king_first_right_down = (320, 500)
+    hundred_ghosts_choose_king_second_left_up = (580, 450)
+    hundred_ghosts_choose_king_second_right_down = (680, 500)
+    hundred_ghosts_choose_king_third_left_up = (930, 450)
+    hundred_ghosts_choose_king_third_right_down = (1030, 500)
+    hundred_ghosts_throw_height = (300, 450)
+    hundred_ghosts_drag_width = (420, 480)
+    hundred_ghosts_drag_height = (0, 720)
+    hundred_ghosts_ticket_left_up = (788, 517)
+    hundred_ghosts_ticket_right_down = (841, 545)
 
     @staticmethod
     def get_user_name_by_index(index: int) -> str:

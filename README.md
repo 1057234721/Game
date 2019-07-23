@@ -1,5 +1,5 @@
 # Game
-Python Script to free hand on playing Onmyoji
+Python Script to free hand on playing Onmyoji (YYS, 阴阳师)
 # Features
 1.Use opencv to detect the template pictures in the screen shot of the simulator, and then make some actions according to user's demand.  
 2.By Using Thunder Android Simulator's ld and ldconsole api, users can run the script and players in background.  
@@ -38,10 +38,14 @@ re
 1. Awakening and Mitama automation in team mode  
 2. Awakening, Mitama, Original Fire and Imperial spirit (bad translation xd) automation in solo mode  
 3. Personal Breakthrough automaton  
-4. Chapter automation in solo mode
+4. Chapter automation in solo mode  
+5. Hundred Ghosts in dummy version, which means it random clicks. AI version is in training and testing.
 # Developing Plan
 1. add more functions
 2. add gui (maybe xd)
 # Disclaimer
 阴阳师™ (Onmyoji) is a brand which belongs to NetEase™ Corporation (网易(杭州)网络有限公司).  
+All the screen shots and icons in Onmyoji_images file are copies from Onmyoji Game screenshots. The copyright belongs to NetEase™ Corporation (网易(杭州)网络有限公司).  
 雷电模拟器™ (Thunder Android Simulator) is a brand which belongs to Shanghai Changzhi Internet Technology Corporation (上海畅指网络科技有限公司).  
+Baidu OCR API is one kind of technology which belongs to Baidu™ Corporation (百度股份有限公司).  
+OpenCV is open source and released under the BSD 3-Clause License. 
