@@ -48,3 +48,4 @@ re
 All the screen shots and icons in Onmyoji_images file are copies from Onmyoji Game screenshots. The copyright belongs to NetEase™ Corporation (网易(杭州)网络有限公司).  
 雷电模拟器™ (Thunder Android Simulator) is a brand which belongs to Shanghai Changzhi Internet Technology Corporation (上海畅指网络科技有限公司).  
 Baidu OCR API is one kind of technology which belongs to Baidu™ Corporation (百度股份有限公司).  
+OpenCV is open source and released under the BSD 3-Clause License. 
