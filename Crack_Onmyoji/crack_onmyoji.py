@@ -434,17 +434,19 @@ class Cracker(threading.Thread):
                 if template == './Onmyoji_images\\enter_hundred_ghosts.png':
                     ticket -= 1
                     ThunderController.touch(self.index, ThunderController.cheat(location))
-                if template == './Onmyoji_images\\begin_hundred_ghosts.png':
+                elif template == './Onmyoji_images\\begin_hundred_ghosts.png':
                     choose_pool = [(Onmyoji.hundred_ghosts_choose_king_first_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_first_right_down),
                                    (Onmyoji.hundred_ghosts_choose_king_second_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_second_right_down),
                                    (Onmyoji.hundred_ghosts_choose_king_third_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_third_right_down)]
-                    random_king = random.randint(0, 2)
-                    king_locations = choose_pool[random_king]
-                    ThunderController.random_click(self.index, *king_locations)
-                    ThunderController.random_sleep()
+                    for _ in range(3):
+                        random_king = random.randint(0, 2)
+                        king_locations = choose_pool[random_king]
+                        ThunderController.random_click(self.index, *king_locations)
+                        ThunderController.random_sleep()
+                    ThunderController.random_sleep(1.5, 2)
                     ThunderController.touch(self.index, ThunderController.cheat(location))
                     ThunderController.random_sleep(1.5, 2)
                     exist, location = ThunderController.wait_picture(self.index, 1,
