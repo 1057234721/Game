@@ -23,7 +23,7 @@ class Cracker(threading.Thread):
             if len(current_task) == 1:
                 eval("self." + current_task[0])()
             else:
-                eval("self." + current_task[0])(*current_task[1:])
+                eval("self." + current_task[0])(eval(current_task[1]))
 
     def start_onmyoji(self) -> None:
         if ThunderController.is_player_running(self.index):
