@@ -427,7 +427,7 @@ class Cracker(threading.Thread):
         result = ThunderController.fetch_number_from_picture(ticket)
         result = int(result)
         ticket = result
-        while ticket > 0:
+        while ticket >= 0:
             print('have ', ticket, ' tickets')
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.hundred_ghosts)
             if exist:
@@ -441,7 +441,7 @@ class Cracker(threading.Thread):
                                     Onmyoji.hundred_ghosts_choose_king_second_right_down),
                                    (Onmyoji.hundred_ghosts_choose_king_third_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_third_right_down)]
-                    for _ in range(3):
+                    for _ in range(1):
                         random_king = random.randint(0, 2)
                         king_locations = choose_pool[random_king]
                         ThunderController.random_click(self.index, *king_locations)
@@ -498,7 +498,10 @@ def main():
     # c0.chapter_solo()
     # c0.solo_mode()
     # c0.break_through()
-    c2.hundred_ghosts()
+    c1 = Cracker(1, [['hundred_ghosts']])
+    c2 = Cracker(2, [['hundred_ghosts']])
+    c1.start()
+    c2.start()
 
 
 if __name__ == '__main__':
