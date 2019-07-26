@@ -235,7 +235,7 @@ class Cracker(threading.Thread):
                 if template == './Onmyoji_images\\challenge_victory.png':
                     ThunderController.random_sleep(55, 65)
 
-    def in_chapter_battle(self) -> None:
+    def _in_chapter_battle(self) -> None:
         screen = ThunderController.screen_shot(self.index)
         locations = ThunderController.find_all_pictures(screen, ThunderController.share_path + '/max_level_flag.png')
         max_level_flag = False
@@ -312,6 +312,21 @@ class Cracker(threading.Thread):
             drag_time = random.randint(1000, 2000)
             ThunderController.swipe(self.index, (right, height), (left, height), drag_time)
 
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1, 2)
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path + '/chapter_28_flag.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path + '/explore_start_icon.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1, 2)
         exist, _ = ThunderController.wait_picture(self.index, 1,
                                                   ThunderController.share_path + '/fix_team_flag.png')
         if exist:
@@ -321,7 +336,7 @@ class Cracker(threading.Thread):
                 if exist:
                     ThunderController.touch(self.index, location[:2])
                     ThunderController.random_sleep(3.5, 4.5)
-                    self.in_chapter_battle()
+                    self._in_chapter_battle()
                     ThunderController.random_sleep()
                 else:
                     if random.uniform(0, 1) > 0.5:
@@ -343,6 +358,7 @@ class Cracker(threading.Thread):
                         if exist:
                             ThunderController.touch(self.index, ThunderController.cheat(location))
                     break
+            self.any_pages_back_to_home_page()
 
     def hundred_ghosts(self) -> None:
         ticket = ThunderController.intercept_rectangle_from_picture(self.index,
@@ -426,7 +442,7 @@ def main():
     # c2 = Cracker(2, [['hundred_ghosts']])
     # c1.start()
     # c2.start()
-    c0.break_through()
+    c0.chapter_solo()
 
 
 if __name__ == '__main__':
