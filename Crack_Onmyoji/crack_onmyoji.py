@@ -35,7 +35,10 @@ class Cracker(threading.Thread):
         self.any_pages_back_to_home_page()
 
     def is_home_page_or_not(self) -> bool:
-        return ThunderController.wait_picture(self.index, 1, ThunderController.share_path + "/bonus.png")[0]
+        return ThunderController.wait_picture(self.index, 1,
+                                              ThunderController.share_path + "/bonus.png")[0] \
+               and not ThunderController.wait_picture(self.index, 1,
+                                                      ThunderController.share_path + "/yard_close.png")[0]
 
     def any_pages_back_to_home_page(self) -> None:
         while True:
@@ -64,6 +67,7 @@ class Cracker(threading.Thread):
                                                              "/team_confirm_leave.png")
                 ThunderController.touch(self.index, ThunderController.cheat(location))
                 ThunderController.random_sleep()
+        self.any_pages_back_to_home_page()
 
     def accept_invite(self, acceptor: bool = True) -> None:
         auto_accept_flag = False
@@ -98,99 +102,18 @@ class Cracker(threading.Thread):
                     print(count)
                 ThunderController.touch(self.index, ThunderController.cheat(location))
 
-    # def break_through(self)-> None:
-    #     refresh = False
-    #     while True:
-    #         screen = ThunderController.screen_shot(self.index)
-    #         click_locations = ThunderController.find_all_pictures(
-    #             screen,
-    #             ThunderController.share_path + '/zero_star.png', 0.95)
-    #         click_position = None
-    #         if len(click_locations) > 0:
-    #             ticket = ThunderController.intercept_rectangle_from_picture(self.index,
-    #                                                                         Onmyoji.break_through_ticket_left_up,
-    #                                                                         Onmyoji.break_through_ticket_right_down)
-    #             result = ThunderController.fetch_number_from_picture(ticket)
-    #             result = int(result[:-2])
-    #             print('have ', result, 'tickets')
-    #             if result == 0:
-    #                 break
-    #             word_pic = ThunderController.intercept_rectangle_from_picture(self.index,
-    #                                                                           Onmyoji.break_through_word_left_up,
-    #                                                                           Onmyoji.break_through_word_right_down)
-    #             result = ThunderController.fetch_number_from_picture(word_pic)
-    #             result = int(result)
-    #             print("already beat... ", result)
-    #             if result >= 3:
-    #                 if result == 3:
-    #                     exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
-    #                     if exist:
-    #                         ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                         ThunderController.random_sleep()
-    #                 refresh = True
-    #             if not refresh:
-    #                 screen = ThunderController.screen_shot(self.index)
-    #                 remove_locations = ThunderController.find_all_pictures(screen,
-    #                                                                        ThunderController.share_path
-    #                                                                        + '/break_through_fail_flag.png')
-    #                 if len(remove_locations) > 0:
-    #                     to_remove = []
-    #                     for click in click_locations:
-    #                         for remove in remove_locations:
-    #                             if 130 >= remove[0] - click[0] >= 70 and 80 >= click[1] - remove[1] >= 40:
-    #                                 to_remove.append(click)
-    #                     for remove in to_remove:
-    #                         click_locations.remove(remove)
-    #                 print(click_locations)
-    #                 if len(click_locations) > 0:
-    #                     click_position = click_locations[random.randint(0, len(click_locations) - 1)]
-    #                 else:
-    #                     refresh = True
-    #             if not refresh:
-    #                 ThunderController.touch(self.index, ThunderController.cheat(click_position))
-    #                 ThunderController.random_sleep()
-    #                 exist, location = ThunderController.wait_picture(
-    #                     self.index, 10,
-    #                     ThunderController.share_path + '/attack_star.png')
-    #                 if exist:
-    #                     ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                     ThunderController.random_sleep(10, 12)
-    #         exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
-    #         if exist:
-    #             ThunderController.touch(self.index, ThunderController.cheat(location))
-    #             ThunderController.random_sleep()
-    #         if refresh:
-    #             exist, location = ThunderController.wait_picture(self.index, 1,
-    #                                                              ThunderController.share_path +
-    #                                                              '/breakthrough_refresh.png')
-    #             if exist:
-    #                 ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                 ThunderController.random_sleep()
-    #                 exist, location = ThunderController.wait_picture(self.index, 10,
-    #                                                                  ThunderController.share_path +
-    #                                                                  '/breakthrough_refresh_confirm.png')
-    #                 if exist:
-    #                     ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                     ThunderController.random_sleep(3, 4)
-    #                     screen = ThunderController.screen_shot(self.index)
-    #                     locations = ThunderController.find_all_pictures(screen, ThunderController.share_path +
-    #                                                                     '/zero_star.png', 0.95)
-    #                     print('zero star number: ', len(locations))
-    #                     if len(locations) >= 3:
-    #                         refresh = False
-    #             else:
-    #                 sleep_time = ThunderController.intercept_rectangle_from_picture(
-    #                     self.index,
-    #                     Onmyoji.break_through_sleep_left_up,
-    #                     Onmyoji.break_through_sleep_right_down)
-    #                 result = ThunderController.fetch_number_from_picture(sleep_time)
-    #                 minute = int(result[:2])
-    #                 second = int(result[2:])
-    #                 sleep_time = 60 * minute + second
-    #                 print('need to sleep... ', sleep_time)
-    #                 ThunderController.random_sleep(sleep_time, sleep_time + 10)
-
     def break_through(self) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_sleep()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1, 2)
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path + '/breakthrough_icon.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
         refresh = False
         ticket = ThunderController.intercept_rectangle_from_picture(self.index,
                                                                     Onmyoji.break_through_ticket_left_up,
@@ -201,6 +124,7 @@ class Cracker(threading.Thread):
         while True:
             print('have ', ticket, 'tickets')
             if ticket <= 2:
+                self.any_pages_back_to_home_page()
                 break
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
@@ -498,10 +422,11 @@ def main():
     # c0.chapter_solo()
     # c0.solo_mode()
     # c0.break_through()
-    c1 = Cracker(1, [['hundred_ghosts']])
-    c2 = Cracker(2, [['hundred_ghosts']])
-    c1.start()
-    c2.start()
+    # c1 = Cracker(1, [['hundred_ghosts']])
+    # c2 = Cracker(2, [['hundred_ghosts']])
+    # c1.start()
+    # c2.start()
+    c0.break_through()
 
 
 if __name__ == '__main__':
