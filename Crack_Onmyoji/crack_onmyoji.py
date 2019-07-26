@@ -1,6 +1,9 @@
 import random
 import threading
+import re
+import sys
 import time
+from Crack_Onmyoji.log_recorder import LogRecorder
 from Crack_Onmyoji.thunder_controller import ThunderController
 from Crack_Onmyoji.onmyoji import Onmyoji
 
@@ -478,3 +481,28 @@ class Cracker(threading.Thread):
                         ThunderController.random_click(self.index, *area_locations)
                 else:
                     ThunderController.touch(self.index, ThunderController.cheat(location))
+
+
+def main():
+    run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
+    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
+    c0 = Cracker(0, [['accept_invite']], Onmyoji())
+    c1 = Cracker(1, [['accept_invite']])
+    c2 = Cracker(2, [['accept_invite', False]])
+    # c3 = Cracker(3, [['accept_invite', False]])
+    # c0.start()
+    # c1.start()
+    # c2.start()
+    # c3.start()
+    # c3.chapter_solo()
+    # c0.chapter_solo()
+    # c0.solo_mode()
+    # c0.break_through()
+    c1 = Cracker(1, [['hundred_ghosts']])
+    c2 = Cracker(2, [['hundred_ghosts']])
+    c1.start()
+    c2.start()
+
+
+if __name__ == '__main__':
+    main()
