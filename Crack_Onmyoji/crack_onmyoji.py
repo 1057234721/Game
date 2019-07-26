@@ -360,20 +360,33 @@ class Cracker(threading.Thread):
                     break
             self.any_pages_back_to_home_page()
 
-    def hundred_ghosts(self) -> None:
+    def hundred_ghosts(self, count: int) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/to_yard_icon.png")
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/hundred_ghosts_flag.png", 0.7)
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
         ticket = ThunderController.intercept_rectangle_from_picture(self.index,
                                                                     Onmyoji.hundred_ghosts_ticket_left_up,
                                                                     Onmyoji.hundred_ghosts_ticket_right_down)
         result = ThunderController.fetch_number_from_picture(ticket)
         result = int(result)
         ticket = result
-        while ticket >= 0:
+        times = 0
+        while ticket >= 0 and times < count:
             print('have ', ticket, ' tickets')
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.hundred_ghosts)
             if exist:
                 if template == './Onmyoji_images\\enter_hundred_ghosts.png':
-                    ticket -= 1
                     ThunderController.touch(self.index, ThunderController.cheat(location))
+                    print(self.index, ' begin ', times, ' hundred ghosts')
                 elif template == './Onmyoji_images\\begin_hundred_ghosts.png':
                     choose_pool = [(Onmyoji.hundred_ghosts_choose_king_first_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_first_right_down),
@@ -386,13 +399,15 @@ class Cracker(threading.Thread):
                         king_locations = choose_pool[random_king]
                         ThunderController.random_click(self.index, *king_locations)
                         ThunderController.random_sleep()
-                    ThunderController.random_sleep(1.5, 2)
+                    ThunderController.random_sleep(1.8, 3)
                     ThunderController.touch(self.index, ThunderController.cheat(location))
-                    ThunderController.random_sleep(1.5, 2)
+                    ThunderController.random_sleep(1.8, 3)
                     exist, location = ThunderController.wait_picture(self.index, 1,
                                                                      ThunderController.share_path
                                                                      + '/five_ghosts.png')
                     if exist:
+                        ticket -= 1
+                        times += 1
                         height = random.randint(*Onmyoji.hundred_ghosts_drag_height)
                         width = random.randint(*Onmyoji.hundred_ghosts_drag_width)
                         drag_time = random.randint(1000, 2000)
@@ -421,6 +436,8 @@ class Cracker(threading.Thread):
                         ThunderController.random_click(self.index, *area_locations)
                 else:
                     ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
+        self.any_pages_back_to_home_page()
 
 
 def main():
@@ -442,7 +459,7 @@ def main():
     # c2 = Cracker(2, [['hundred_ghosts']])
     # c1.start()
     # c2.start()
-    c0.chapter_solo()
+    c1.hundred_ghosts(0)
 
 
 if __name__ == '__main__':
