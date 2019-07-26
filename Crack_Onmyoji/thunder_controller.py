@@ -291,7 +291,7 @@ class ThunderController:
     # find the matched picture, assuming the player is running
     @staticmethod
     def find_single_picture(screen: str, template: str, threshold: float = 0.85, debug: bool = False) -> \
-            (int, int, int, int):
+            ((int, int, int, int), float):
         screen_shot = cv2.imread(screen)
         template_picture = cv2.imread(template)
         result = cv2.matchTemplate(screen_shot, template_picture, cv2.TM_CCOEFF_NORMED)
@@ -313,13 +313,13 @@ class ThunderController:
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
                 print(x, y, w, h)
-            return x, y, w, h
+            return (x, y, w, h), maximum_value
         else:
             if debug:
                 cv2.imshow("don't find: " + template, screen_shot)
                 cv2.waitKey(0)
                 cv2.destroyAllWindows()
-            return None
+            return None, -1
 
     # wait for specified picture, assuming the player is running
     @staticmethod
@@ -330,7 +330,7 @@ class ThunderController:
         while count < timeout:
             screen = ThunderController.screen_shot(index, sleep_time_low, sleep_time_high)
             print(str(index), ' is waiting... ', template)
-            location = ThunderController.find_single_picture(screen, template, threshold)
+            location, _ = ThunderController.find_single_picture(screen, template, threshold)
             if location is None:
                 ThunderController.random_sleep()
                 count += 1
@@ -346,14 +346,20 @@ class ThunderController:
     def check_picture_list(index: int, templates: list, threshold: float = 0.85, sleep_time_low: float = 0.4,
                            sleep_time_high: float = 0.6) -> (bool, (int, int, int, int), str):
         screen = ThunderController.screen_shot(index, sleep_time_low, sleep_time_high)
+        check_list = []
         for template_index, template in enumerate(templates):
             print(str(index), ' is checking... ', template)
-            location = ThunderController.find_single_picture(screen, template, threshold)
-            if location is not None:
-                print(str(index), ' is checking and find... ', template)
-                return True, location, template
-        print(str(index), " is checking and DON'T find any template... ")
-        return False, None, None
+            location, max_value = ThunderController.find_single_picture(screen, template, threshold)
+            if max_value != -1:
+                print(str(index), ' has a backup template ', template)
+                check_list.append((max_value, (location, template)))
+        if len(check_list) >= 1:
+            best_template = sorted(check_list, key=lambda one_solution: one_solution[0], reverse=True)[0]
+            print(str(index), ' gets a best template ', best_template)
+            return True, best_template[1][0], best_template[1][1]
+        else:
+            print(str(index), " is checking and DON'T find any template... ")
+            return False, None, None
 
     # fetch the number (str) from the picture by using the api, must be png format
     @staticmethod
