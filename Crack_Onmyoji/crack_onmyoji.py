@@ -1,9 +1,6 @@
 import random
-import re
-import sys
 import threading
 import time
-from Crack_Onmyoji.log_recorder import LogRecorder
 from Crack_Onmyoji.thunder_controller import ThunderController
 from Crack_Onmyoji.onmyoji import Onmyoji
 

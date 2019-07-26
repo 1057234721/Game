@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, url_for
-
+import re
+import sys
+import time
+from Crack_Onmyoji.log_recorder import LogRecorder
 from Crack_Onmyoji.crack_onmyoji import Cracker
 
 app = Flask(__name__)
@@ -44,8 +47,10 @@ def hello_world():
             else:
                 c3 = Cracker(3, [[task3]])
             c3.start()
-        return '开始任务'
+        return render_template('detail.html', count='223')
 
 
 if __name__ == '__main__':
+    run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
+    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     app.run(debug=True)
