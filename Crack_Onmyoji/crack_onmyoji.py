@@ -31,10 +31,10 @@ class Cracker(threading.Thread):
         ThunderController.random_click(self.index, Onmyoji.left_up_position, Onmyoji.right_down_position)
         self.any_pages_back_to_home_page()
 
-    def is_home_page_or_not(self):
+    def is_home_page_or_not(self) -> bool:
         return ThunderController.wait_picture(self.index, 1, ThunderController.share_path + "/bonus.png")[0]
 
-    def any_pages_back_to_home_page(self):
+    def any_pages_back_to_home_page(self) -> None:
         while True:
             if self.is_home_page_or_not():
                 break
@@ -47,7 +47,7 @@ class Cracker(threading.Thread):
                 else:
                     print("not found ...")
 
-    def leave_team(self):
+    def leave_team(self) -> None:
         while True:
             exist, location = ThunderController.wait_picture(self.index, 3, ThunderController.share_path +
                                                              "/team_leave.png")
@@ -62,7 +62,7 @@ class Cracker(threading.Thread):
                 ThunderController.touch(self.index, ThunderController.cheat(location))
                 ThunderController.random_sleep()
 
-    def accept_invite(self, acceptor: bool = True):
+    def accept_invite(self, acceptor: bool = True) -> None:
         auto_accept_flag = False
         auto_invite_flag = False
         inviter = not acceptor
@@ -95,7 +95,7 @@ class Cracker(threading.Thread):
                     print(count)
                 ThunderController.touch(self.index, ThunderController.cheat(location))
 
-    # def break_through(self):
+    # def break_through(self)-> None:
     #     refresh = False
     #     while True:
     #         screen = ThunderController.screen_shot(self.index)
@@ -187,7 +187,7 @@ class Cracker(threading.Thread):
     #                 print('need to sleep... ', sleep_time)
     #                 ThunderController.random_sleep(sleep_time, sleep_time + 10)
 
-    def break_through(self):
+    def break_through(self) -> None:
         refresh = False
         ticket = ThunderController.intercept_rectangle_from_picture(self.index,
                                                                     Onmyoji.break_through_ticket_left_up,
@@ -300,7 +300,7 @@ class Cracker(threading.Thread):
                     print('need to sleep... ', sleep_time)
                     ThunderController.random_sleep(sleep_time, sleep_time + 10)
 
-    def solo_mode(self):
+    def solo_mode(self) -> None:
         while True:
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
@@ -308,7 +308,7 @@ class Cracker(threading.Thread):
                 if template == './Onmyoji_images\\challenge_victory.png':
                     ThunderController.random_sleep(55, 65)
 
-    def in_chapter_battle(self):
+    def in_chapter_battle(self) -> None:
         screen = ThunderController.screen_shot(self.index)
         locations = ThunderController.find_all_pictures(screen, ThunderController.share_path + '/max_level_flag.png')
         max_level_flag = False
@@ -369,7 +369,7 @@ class Cracker(threading.Thread):
             if exist:
                 break
 
-    def chapter_solo(self):
+    def chapter_solo(self) -> None:
 
         def drag_to_left():
             height = random.randint(*Onmyoji.chapter_drag_height)
@@ -417,7 +417,7 @@ class Cracker(threading.Thread):
                             ThunderController.touch(self.index, ThunderController.cheat(location))
                     break
 
-    def hundred_ghosts(self):
+    def hundred_ghosts(self) -> None:
         ticket = ThunderController.intercept_rectangle_from_picture(self.index,
                                                                     Onmyoji.hundred_ghosts_ticket_left_up,
                                                                     Onmyoji.hundred_ghosts_ticket_right_down)
