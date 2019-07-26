@@ -7,6 +7,14 @@ from Crack_Onmyoji.crack_onmyoji import Cracker
 
 app = Flask(__name__)
 
+cracker_list = []
+
+
+@app.route('/exist_sys', methods=['GET', 'POST'])
+def exist_sys():
+    for cracker in cracker_list:
+        cracker.s
+
 
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
@@ -29,25 +37,29 @@ def hello_world():
             else:
                 c0 = Cracker(0, [[task0]])
             c0.start()
+            cracker_list.append(c0)
         if task1 != '':
             if arg1 != '':
                 c1 = Cracker(1, [[task1, arg1]])
             else:
                 c1 = Cracker(1, [[task1]])
             c1.start()
+            cracker_list.append(c1)
         if task2 != '':
             if arg2 != '':
                 c2 = Cracker(2, [[task2, arg2]])
             else:
                 c2 = Cracker(2, [[task2]])
             c2.start()
+            cracker_list.append(c2)
         if task3 != '':
             if arg3 != '':
                 c3 = Cracker(3, [[task3, arg3]])
             else:
                 c3 = Cracker(3, [[task3]])
             c3.start()
-        return render_template('detail.html', count='223')
+            cracker_list.append(c3)
+        return render_template('detail.html')
 
 
 if __name__ == '__main__':
