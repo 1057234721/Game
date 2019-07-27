@@ -439,6 +439,38 @@ class Cracker(threading.Thread):
         ThunderController.random_sleep()
         self.any_pages_back_to_home_page()
 
+    def open_close_buff(self, buff_type: str, buff_option: bool) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/bonus.png")
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
+        if buff_type == 'mitama':
+            mitama_flag = self._buff_check_in_location(Onmyoji.mitama_buff_check_left_up,
+                                                       Onmyoji.mitama_buff_check_right_down)
+            if mitama_flag ^ buff_option:
+                ThunderController.random_click(self.index, Onmyoji.mitama_buff_left_up, Onmyoji.mitama_buff_right_down)
+        if buff_type == 'awake':
+            awake_flag = self._buff_check_in_location(Onmyoji.awake_buff_check_left_up,
+                                                      Onmyoji.awake_buff_check_right_down)
+            if awake_flag ^ buff_option:
+                ThunderController.random_click(self.index, Onmyoji.awake_buff_left_up, Onmyoji.awake_buff_right_down)
+        ThunderController.random_sleep()
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/bonus.png")
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+
+    def _buff_check_in_location(self, left_up: (int, int), right_down: (int, int)) -> bool:
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/buff_check.png")
+        if exist:
+            return location[0] in range(left_up[0], right_down[0]) and location[1] in range(left_up[1], right_down[1])
+        else:
+            return False
+
 
 def main():
     run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
@@ -459,7 +491,7 @@ def main():
     # c2 = Cracker(2, [['hundred_ghosts']])
     # c1.start()
     # c2.start()
-    c1.hundred_ghosts(0)
+    c0.open_close_buff('mitama', True)
 
 
 if __name__ == '__main__':
