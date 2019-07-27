@@ -53,6 +53,8 @@ class Onmyoji:
     awake_buff_check_right_down = (893, 176)
     mitama_buff_check_left_up = (768, 200)
     mitama_buff_check_right_down = (896, 244)
+    group_break_through_times_left_up = (269, 545)
+    group_break_through_times_right_down = (330, 585)
 
     @staticmethod
     def get_user_name_by_index(index: int) -> str:
