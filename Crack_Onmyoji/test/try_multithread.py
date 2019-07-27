@@ -1,38 +1,24 @@
-import queue
 import threading
-import time
-import random
-
-q = queue.Queue()
-threads = []
 
 
-class MyThread(threading.Thread):
-    def __init__(self, message_queue, thread_id, sleep_time):
-        super(MyThread, self).__init__()
-        self.message_queue = message_queue
-        self.thread_id = thread_id
-        self.sleep_time = sleep_time
+class Count(threading.Thread):
+    count = 1
+
+    def __init__(self, print_count):
+        super(Count, self).__init__()
+        self.print_count = print_count
 
     def run(self):
-        time.sleep(self.sleep_time)
-        self.message_queue.put(
-            "I'm %d thread, slept %d seconds, and current time is %s" % (self.thread_id, self.sleep_time, time.ctime()))
+        while Count.count <= 10000000:
+            if self.print_count:
+                print(Count.count)
+            else:
+                Count.count += 1
 
 
-for i in range(10):
-    sleep_time = random.randint(1, 5)
-    threads.append(MyThread(q, i, sleep_time))
-
-for thread in threads:
-    thread.start()
-
-print("time to start multi-threading %s" % time.ctime())
-
-count = 0
-while True:
-    if not q.empty():
-        print(q.get())
-        count += 1
-    if count == 10:
-        break
+count_1 = Count(False)
+count_2 = Count(True)
+count_1.start()
+count_2.start()
+count_1.join()
+count_2.join()

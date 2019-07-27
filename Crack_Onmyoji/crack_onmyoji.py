@@ -1,7 +1,7 @@
 import random
+import threading
 import re
 import sys
-import threading
 import time
 from Crack_Onmyoji.log_recorder import LogRecorder
 from Crack_Onmyoji.thunder_controller import ThunderController
@@ -23,7 +23,7 @@ class Cracker(threading.Thread):
             if len(current_task) == 1:
                 eval("self." + current_task[0])()
             else:
-                eval("self." + current_task[0])(*current_task[1:])
+                eval("self." + current_task[0])(eval(current_task[1]))
 
     def start_onmyoji(self) -> None:
         if ThunderController.is_player_running(self.index):
@@ -34,10 +34,13 @@ class Cracker(threading.Thread):
         ThunderController.random_click(self.index, Onmyoji.left_up_position, Onmyoji.right_down_position)
         self.any_pages_back_to_home_page()
 
-    def is_home_page_or_not(self):
-        return ThunderController.wait_picture(self.index, 1, ThunderController.share_path + "/bonus.png")[0]
+    def is_home_page_or_not(self) -> bool:
+        return ThunderController.wait_picture(self.index, 1,
+                                              ThunderController.share_path + "/bonus.png")[0] \
+               and not ThunderController.wait_picture(self.index, 1,
+                                                      ThunderController.share_path + "/yard_close.png")[0]
 
-    def any_pages_back_to_home_page(self):
+    def any_pages_back_to_home_page(self) -> None:
         while True:
             if self.is_home_page_or_not():
                 break
@@ -50,7 +53,7 @@ class Cracker(threading.Thread):
                 else:
                     print("not found ...")
 
-    def leave_team(self):
+    def leave_team(self) -> None:
         while True:
             exist, location = ThunderController.wait_picture(self.index, 3, ThunderController.share_path +
                                                              "/team_leave.png")
@@ -64,8 +67,9 @@ class Cracker(threading.Thread):
                                                              "/team_confirm_leave.png")
                 ThunderController.touch(self.index, ThunderController.cheat(location))
                 ThunderController.random_sleep()
+        self.any_pages_back_to_home_page()
 
-    def accept_invite(self, acceptor: bool = True):
+    def accept_invite(self, acceptor: bool = True) -> None:
         auto_accept_flag = False
         auto_invite_flag = False
         inviter = not acceptor
@@ -98,99 +102,18 @@ class Cracker(threading.Thread):
                     print(count)
                 ThunderController.touch(self.index, ThunderController.cheat(location))
 
-    # def break_through(self):
-    #     refresh = False
-    #     while True:
-    #         screen = ThunderController.screen_shot(self.index)
-    #         click_locations = ThunderController.find_all_pictures(
-    #             screen,
-    #             ThunderController.share_path + '/zero_star.png', 0.95)
-    #         click_position = None
-    #         if len(click_locations) > 0:
-    #             ticket = ThunderController.intercept_rectangle_from_picture(self.index,
-    #                                                                         Onmyoji.break_through_ticket_left_up,
-    #                                                                         Onmyoji.break_through_ticket_right_down)
-    #             result = ThunderController.fetch_number_from_picture(ticket)
-    #             result = int(result[:-2])
-    #             print('have ', result, 'tickets')
-    #             if result == 0:
-    #                 break
-    #             word_pic = ThunderController.intercept_rectangle_from_picture(self.index,
-    #                                                                           Onmyoji.break_through_word_left_up,
-    #                                                                           Onmyoji.break_through_word_right_down)
-    #             result = ThunderController.fetch_number_from_picture(word_pic)
-    #             result = int(result)
-    #             print("already beat... ", result)
-    #             if result >= 3:
-    #                 if result == 3:
-    #                     exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
-    #                     if exist:
-    #                         ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                         ThunderController.random_sleep()
-    #                 refresh = True
-    #             if not refresh:
-    #                 screen = ThunderController.screen_shot(self.index)
-    #                 remove_locations = ThunderController.find_all_pictures(screen,
-    #                                                                        ThunderController.share_path
-    #                                                                        + '/break_through_fail_flag.png')
-    #                 if len(remove_locations) > 0:
-    #                     to_remove = []
-    #                     for click in click_locations:
-    #                         for remove in remove_locations:
-    #                             if 130 >= remove[0] - click[0] >= 70 and 80 >= click[1] - remove[1] >= 40:
-    #                                 to_remove.append(click)
-    #                     for remove in to_remove:
-    #                         click_locations.remove(remove)
-    #                 print(click_locations)
-    #                 if len(click_locations) > 0:
-    #                     click_position = click_locations[random.randint(0, len(click_locations) - 1)]
-    #                 else:
-    #                     refresh = True
-    #             if not refresh:
-    #                 ThunderController.touch(self.index, ThunderController.cheat(click_position))
-    #                 ThunderController.random_sleep()
-    #                 exist, location = ThunderController.wait_picture(
-    #                     self.index, 10,
-    #                     ThunderController.share_path + '/attack_star.png')
-    #                 if exist:
-    #                     ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                     ThunderController.random_sleep(10, 12)
-    #         exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
-    #         if exist:
-    #             ThunderController.touch(self.index, ThunderController.cheat(location))
-    #             ThunderController.random_sleep()
-    #         if refresh:
-    #             exist, location = ThunderController.wait_picture(self.index, 1,
-    #                                                              ThunderController.share_path +
-    #                                                              '/breakthrough_refresh.png')
-    #             if exist:
-    #                 ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                 ThunderController.random_sleep()
-    #                 exist, location = ThunderController.wait_picture(self.index, 10,
-    #                                                                  ThunderController.share_path +
-    #                                                                  '/breakthrough_refresh_confirm.png')
-    #                 if exist:
-    #                     ThunderController.touch(self.index, ThunderController.cheat(location))
-    #                     ThunderController.random_sleep(3, 4)
-    #                     screen = ThunderController.screen_shot(self.index)
-    #                     locations = ThunderController.find_all_pictures(screen, ThunderController.share_path +
-    #                                                                     '/zero_star.png', 0.95)
-    #                     print('zero star number: ', len(locations))
-    #                     if len(locations) >= 3:
-    #                         refresh = False
-    #             else:
-    #                 sleep_time = ThunderController.intercept_rectangle_from_picture(
-    #                     self.index,
-    #                     Onmyoji.break_through_sleep_left_up,
-    #                     Onmyoji.break_through_sleep_right_down)
-    #                 result = ThunderController.fetch_number_from_picture(sleep_time)
-    #                 minute = int(result[:2])
-    #                 second = int(result[2:])
-    #                 sleep_time = 60 * minute + second
-    #                 print('need to sleep... ', sleep_time)
-    #                 ThunderController.random_sleep(sleep_time, sleep_time + 10)
-
-    def break_through(self):
+    def break_through(self) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_sleep()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path + '/breakthrough_icon.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
         refresh = False
         ticket = ThunderController.intercept_rectangle_from_picture(self.index,
                                                                     Onmyoji.break_through_ticket_left_up,
@@ -201,6 +124,7 @@ class Cracker(threading.Thread):
         while True:
             print('have ', ticket, 'tickets')
             if ticket <= 2:
+                self.any_pages_back_to_home_page()
                 break
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
@@ -303,15 +227,62 @@ class Cracker(threading.Thread):
                     print('need to sleep... ', sleep_time)
                     ThunderController.random_sleep(sleep_time, sleep_time + 10)
 
-    def solo_mode(self):
+    def solo_mode(self, mode: str, addition_arg: str) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_sleep()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1.5, 3)
+        if mode == 'mitama':
+            exist, location = ThunderController.wait_picture(self.index, 2,
+                                                             ThunderController.share_path + '/mitama_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path + '/' + addition_arg +
+                                                                 '_mitama.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+        if mode == 'awake':
+            exist, location = ThunderController.wait_picture(self.index, 2,
+                                                             ThunderController.share_path + '/awake_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path + '/' + addition_arg +
+                                                                 '_awake.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+        if mode == 'imperial_spirit':
+            exist, location = ThunderController.wait_picture(self.index, 2,
+                                                             ThunderController.share_path + '/imperial_spirit_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path + '/' + addition_arg +
+                                                                 '_imperial_spirit.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
         while True:
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
                 ThunderController.touch(self.index, ThunderController.cheat(location))
                 if template == './Onmyoji_images\\challenge_victory.png':
-                    ThunderController.random_sleep(55, 65)
+                    if mode == 'mitama':
+                        ThunderController.random_sleep(20, 30)
+                    if mode == 'awake':
+                        ThunderController.random_sleep(15, 20)
+                    if mode == 'imperial_spirit':
+                        ThunderController.random_sleep(55, 65)
 
-    def in_chapter_battle(self):
+    def _in_chapter_battle(self) -> None:
         screen = ThunderController.screen_shot(self.index)
         locations = ThunderController.find_all_pictures(screen, ThunderController.share_path + '/max_level_flag.png')
         max_level_flag = False
@@ -325,7 +296,7 @@ class Cracker(threading.Thread):
                                                Onmyoji.chapter_attendant_click_right_down)
                 ThunderController.random_click(self.index, Onmyoji.chapter_attendant_click_left_up,
                                                Onmyoji.chapter_attendant_click_right_down)
-                ThunderController.random_sleep()
+                ThunderController.random_sleep(1.5, 3)
                 exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.champion_class)
                 if exist:
                     if template != './Onmyoji_images\\N_class.png':
@@ -372,7 +343,7 @@ class Cracker(threading.Thread):
             if exist:
                 break
 
-    def chapter_solo(self):
+    def chapter_solo(self) -> None:
 
         def drag_to_left():
             height = random.randint(*Onmyoji.chapter_drag_height)
@@ -388,6 +359,21 @@ class Cracker(threading.Thread):
             drag_time = random.randint(1000, 2000)
             ThunderController.swipe(self.index, (right, height), (left, height), drag_time)
 
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path + '/chapter_28_flag.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path + '/explore_start_icon.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
         exist, _ = ThunderController.wait_picture(self.index, 1,
                                                   ThunderController.share_path + '/fix_team_flag.png')
         if exist:
@@ -397,7 +383,7 @@ class Cracker(threading.Thread):
                 if exist:
                     ThunderController.touch(self.index, location[:2])
                     ThunderController.random_sleep(3.5, 4.5)
-                    self.in_chapter_battle()
+                    self._in_chapter_battle()
                     ThunderController.random_sleep()
                 else:
                     if random.uniform(0, 1) > 0.5:
@@ -419,38 +405,56 @@ class Cracker(threading.Thread):
                         if exist:
                             ThunderController.touch(self.index, ThunderController.cheat(location))
                     break
+            self.any_pages_back_to_home_page()
 
-    def hundred_ghosts(self):
+    def hundred_ghosts(self, count: int) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/to_yard_icon.png")
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/hundred_ghosts_flag.png", 0.7)
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
         ticket = ThunderController.intercept_rectangle_from_picture(self.index,
                                                                     Onmyoji.hundred_ghosts_ticket_left_up,
                                                                     Onmyoji.hundred_ghosts_ticket_right_down)
         result = ThunderController.fetch_number_from_picture(ticket)
         result = int(result)
         ticket = result
-        while ticket > 0:
+        times = 0
+        while ticket >= 0 and times < count:
             print('have ', ticket, ' tickets')
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.hundred_ghosts)
             if exist:
                 if template == './Onmyoji_images\\enter_hundred_ghosts.png':
-                    ticket -= 1
                     ThunderController.touch(self.index, ThunderController.cheat(location))
-                if template == './Onmyoji_images\\begin_hundred_ghosts.png':
+                    print(self.index, ' begin ', times, ' hundred ghosts')
+                elif template == './Onmyoji_images\\begin_hundred_ghosts.png':
                     choose_pool = [(Onmyoji.hundred_ghosts_choose_king_first_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_first_right_down),
                                    (Onmyoji.hundred_ghosts_choose_king_second_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_second_right_down),
                                    (Onmyoji.hundred_ghosts_choose_king_third_left_up,
                                     Onmyoji.hundred_ghosts_choose_king_third_right_down)]
-                    random_king = random.randint(0, 2)
-                    king_locations = choose_pool[random_king]
-                    ThunderController.random_click(self.index, *king_locations)
-                    ThunderController.random_sleep()
+                    for _ in range(1):
+                        random_king = random.randint(0, 2)
+                        king_locations = choose_pool[random_king]
+                        ThunderController.random_click(self.index, *king_locations)
+                        ThunderController.random_sleep()
+                    ThunderController.random_sleep(1.8, 3)
                     ThunderController.touch(self.index, ThunderController.cheat(location))
-                    ThunderController.random_sleep(1.5, 2)
+                    ThunderController.random_sleep(1.8, 3)
                     exist, location = ThunderController.wait_picture(self.index, 1,
                                                                      ThunderController.share_path
                                                                      + '/five_ghosts.png')
                     if exist:
+                        ticket -= 1
+                        times += 1
                         height = random.randint(*Onmyoji.hundred_ghosts_drag_height)
                         width = random.randint(*Onmyoji.hundred_ghosts_drag_width)
                         drag_time = random.randint(1000, 2000)
@@ -479,6 +483,40 @@ class Cracker(threading.Thread):
                         ThunderController.random_click(self.index, *area_locations)
                 else:
                     ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
+        self.any_pages_back_to_home_page()
+
+    def open_close_buff(self, buff_type: str, buff_option: bool) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/bonus.png")
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep()
+        if buff_type == 'mitama':
+            mitama_flag = self._buff_check_in_location(Onmyoji.mitama_buff_check_left_up,
+                                                       Onmyoji.mitama_buff_check_right_down)
+            if mitama_flag ^ buff_option:
+                ThunderController.random_click(self.index, Onmyoji.mitama_buff_left_up, Onmyoji.mitama_buff_right_down)
+        if buff_type == 'awake':
+            awake_flag = self._buff_check_in_location(Onmyoji.awake_buff_check_left_up,
+                                                      Onmyoji.awake_buff_check_right_down)
+            if awake_flag ^ buff_option:
+                ThunderController.random_click(self.index, Onmyoji.awake_buff_left_up, Onmyoji.awake_buff_right_down)
+        ThunderController.random_sleep()
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/bonus.png")
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+
+    def _buff_check_in_location(self, left_up: (int, int), right_down: (int, int)) -> bool:
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + "/buff_check.png")
+        if exist:
+            return location[0] in range(left_up[0], right_down[0]) and location[1] in range(left_up[1], right_down[1])
+        else:
+            return False
 
 
 def main():
@@ -496,7 +534,11 @@ def main():
     # c0.chapter_solo()
     # c0.solo_mode()
     # c0.break_through()
-    c2.hundred_ghosts()
+    # c1 = Cracker(1, [['hundred_ghosts']])
+    # c2 = Cracker(2, [['hundred_ghosts']])
+    # c1.start()
+    # c2.start()
+    c1.solo_mode('imperial_spirit', 'fox')
 
 
 if __name__ == '__main__':

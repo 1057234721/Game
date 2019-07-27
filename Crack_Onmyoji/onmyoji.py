@@ -43,6 +43,16 @@ class Onmyoji:
     hundred_ghosts_drag_height = (0, 720)
     hundred_ghosts_ticket_left_up = (788, 517)
     hundred_ghosts_ticket_right_down = (841, 545)
+    home_page_explore_left_up = (660, 128)
+    home_page_explore_right_down = (698, 197)
+    awake_buff_left_up = (860, 137)
+    awake_buff_right_down = (888, 170)
+    mitama_buff_left_up = (860, 210)
+    mitama_buff_right_down = (888, 237)
+    awake_buff_check_left_up = (766, 132)
+    awake_buff_check_right_down = (893, 176)
+    mitama_buff_check_left_up = (768, 200)
+    mitama_buff_check_right_down = (896, 244)
 
     @staticmethod
     def get_user_name_by_index(index: int) -> str:
