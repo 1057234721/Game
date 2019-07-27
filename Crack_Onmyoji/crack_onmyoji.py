@@ -598,10 +598,11 @@ class Cracker(threading.Thread):
                                                              ThunderController.share_path + '/invite/invite_bar.png')
             if exist:
                 ThunderController.touch(self.index, ThunderController.cheat(location))
-            ThunderController.random_sleep()
+            ThunderController.random_sleep(12, 15)
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
         self._invite_friend_to_team(mode, addition_arg, column_name_list)
+        ThunderController.random_sleep(1.5, 3)
         self.accept_invite(False)
 
 
