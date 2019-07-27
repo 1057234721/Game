@@ -227,13 +227,60 @@ class Cracker(threading.Thread):
                     print('need to sleep... ', sleep_time)
                     ThunderController.random_sleep(sleep_time, sleep_time + 10)
 
-    def solo_mode(self) -> None:
+    def solo_mode(self, mode: str, addition_arg: str) -> None:
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_sleep()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1.5, 3)
+        if mode == 'mitama':
+            exist, location = ThunderController.wait_picture(self.index, 2,
+                                                             ThunderController.share_path + '/mitama_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path + '/' + addition_arg +
+                                                                 '_mitama.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+        if mode == 'awake':
+            exist, location = ThunderController.wait_picture(self.index, 2,
+                                                             ThunderController.share_path + '/awake_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path + '/' + addition_arg +
+                                                                 '_awake.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+        if mode == 'imperial_spirit':
+            exist, location = ThunderController.wait_picture(self.index, 2,
+                                                             ThunderController.share_path + '/imperial_spirit_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path + '/' + addition_arg +
+                                                                 '_imperial_spirit.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
         while True:
             exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
                 ThunderController.touch(self.index, ThunderController.cheat(location))
                 if template == './Onmyoji_images\\challenge_victory.png':
-                    ThunderController.random_sleep(55, 65)
+                    if mode == 'mitama':
+                        ThunderController.random_sleep(20, 30)
+                    if mode == 'awake':
+                        ThunderController.random_sleep(15, 20)
+                    if mode == 'imperial_spirit':
+                        ThunderController.random_sleep(55, 65)
 
     def _in_chapter_battle(self) -> None:
         screen = ThunderController.screen_shot(self.index)
@@ -491,7 +538,7 @@ def main():
     # c2 = Cracker(2, [['hundred_ghosts']])
     # c1.start()
     # c2.start()
-    c0.open_close_buff('mitama', True)
+    c1.solo_mode('imperial_spirit', 'fox')
 
 
 if __name__ == '__main__':
