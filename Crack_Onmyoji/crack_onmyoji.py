@@ -625,33 +625,33 @@ class Cracker(threading.Thread):
                 ThunderController.touch(self.index, ThunderController.cheat(location))
             ThunderController.random_sleep(1.5, 3)
             scroll = False
+            not_exist_times = 0
             while True:
                 exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
                 if exist:
-                    if template == './Onmyoji_images\\fail_victory.png':
-                        scroll = True
                     ThunderController.touch(self.index, ThunderController.cheat(location))
-                if not scroll:
-                    exist, location = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
-                                                                     '/group_break_through_flag.png')
+                exist, location = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
+                                                                 '/group_break_through_flag.png')
+                if exist:
+                    exist, location = ThunderController.wait_picture(self.index, 1,
+                                                                     ThunderController.share_path +
+                                                                     '/group_break_through_target.png')
                     if exist:
-                        exist, location, _ = ThunderController.check_picture_list(self.index, [
-                            ThunderController.share_path + '/zero_star.png',
-                            ThunderController.share_path + '/one_star.png'])
+                        not_exist_times = 0
+                        ThunderController.touch(self.index, ThunderController.cheat(location))
+                        ThunderController.random_sleep()
+                        exist, _ = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
+                                                                  '/group_tickets_not_enough.png')
+                        if exist:
+                            break
+                        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                                         ThunderController.share_path +
+                                                                         '/attack_star.png')
                         if exist:
                             ThunderController.touch(self.index, ThunderController.cheat(location))
-                            ThunderController.random_sleep()
-                            exist, _ = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
-                                                                      '/group_tickets_not_enough.png')
-                            if exist:
-                                break
-                            exist, location = ThunderController.wait_picture(self.index, 1,
-                                                                             ThunderController.share_path +
-                                                                             '/attack_star.png')
-                            if exist:
-                                ThunderController.touch(self.index, ThunderController.cheat(location))
-                        else:
-                            scroll = True
+                    else:
+                        scroll = True
+                        not_exist_times += 1
                 if scroll:
                     exist, location = ThunderController.wait_picture(self.index, 2,
                                                                      ThunderController.share_path +
@@ -662,6 +662,8 @@ class Cracker(threading.Thread):
                                                 (location[0], location[1] - 120 if flag else location[1] + 120),
                                                 1800)
                         scroll = False
+                if not_exist_times >= 5:
+                    break
         self.any_pages_back_to_home_page()
 
 
