@@ -23,7 +23,7 @@ class Cracker(threading.Thread):
             if len(current_task) == 1:
                 eval("self." + current_task[0])()
             else:
-                eval("self." + current_task[0])(eval(current_task[1]))
+                eval("self." + current_task[0])(*current_task[1:])
 
     def start_onmyoji(self) -> None:
         if ThunderController.is_player_running(self.index):
@@ -518,17 +518,103 @@ class Cracker(threading.Thread):
         else:
             return False
 
+    def _invite_friend_to_team(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_sleep()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1.5, 3)
+        if mode == 'mitama':
+            exist, location = ThunderController.wait_picture(self.index, 2,
+                                                             ThunderController.share_path + '/mitama_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path +
+                                                                 '/dragon_mitama.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path +
+                                                                 '/mitama_level_' + addition_arg + '.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+        if mode == 'awake':
+            exist, location = ThunderController.wait_picture(self.index, 1,
+                                                             ThunderController.share_path + '/awake_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+                exist, location = ThunderController.wait_picture(self.index, 1,
+                                                                 ThunderController.share_path + '/' + addition_arg +
+                                                                 '_awake.png')
+                if exist:
+                    ThunderController.touch(self.index, ThunderController.cheat(location))
+                ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + '/invite/make_up_team.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + '/invite/create_team_bar.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + '/invite/not_open.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 1,
+                                                         ThunderController.share_path + '/invite/create_bar.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        for column_name in column_name_list:
+            exist, location = ThunderController.wait_picture(self.index, 1,
+                                                             ThunderController.share_path + '/invite/invite_icon.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+            ThunderController.random_sleep(1.5, 3)
+            exist, location = ThunderController.wait_picture(self.index, 1,
+                                                             ThunderController.share_path + '/invite/' + column_name[
+                                                                 0] + '_column.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+            ThunderController.random_sleep(1.5, 3)
+            exist, location = ThunderController.wait_picture(self.index, 1,
+                                                             ThunderController.share_path + '/invite/name_' +
+                                                             column_name[
+                                                                 1] + '.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+            ThunderController.random_sleep(1.5, 3)
+            exist, location = ThunderController.wait_picture(self.index, 1,
+                                                             ThunderController.share_path + '/invite/invite_bar.png')
+            if exist:
+                ThunderController.touch(self.index, ThunderController.cheat(location))
+            ThunderController.random_sleep()
+
+    def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
+        self._invite_friend_to_team(mode, addition_arg, column_name_list)
+        self.accept_invite(False)
+
 
 def main():
     run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
-    c0 = Cracker(0, [['accept_invite']], Onmyoji())
+    c0 = Cracker(0, [['accept_invite']])
     c1 = Cracker(1, [['accept_invite']])
-    c2 = Cracker(2, [['accept_invite', False]])
+    c2 = Cracker(2, [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
     # c3 = Cracker(3, [['accept_invite', False]])
-    # c0.start()
-    # c1.start()
-    # c2.start()
+    c0.start()
+    c1.start()
+    c2.start()
     # c3.start()
     # c3.chapter_solo()
     # c0.chapter_solo()
@@ -538,7 +624,7 @@ def main():
     # c2 = Cracker(2, [['hundred_ghosts']])
     # c1.start()
     # c2.start()
-    c1.solo_mode('imperial_spirit', 'fox')
+    # c0.mitama_or_awake_invite('mitama', '10', [('cross', 'ybymq'), ('cross', 'ybyls')])
 
 
 if __name__ == '__main__':
