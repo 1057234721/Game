@@ -1,3 +1,4 @@
+import os
 import random
 import threading
 import re
@@ -448,7 +449,7 @@ class Cracker(threading.Thread):
                         ThunderController.random_sleep()
                     ThunderController.random_sleep(1.8, 3)
                     ThunderController.touch(self.index, ThunderController.cheat(location))
-                    ThunderController.random_sleep(1.8, 3)
+                    ThunderController.random_sleep(2, 3)
                     exist, location = ThunderController.wait_picture(self.index, 1,
                                                                      ThunderController.share_path
                                                                      + '/five_ghosts.png')
@@ -461,6 +462,8 @@ class Cracker(threading.Thread):
                         ThunderController.swipe(self.index, location,
                                                 (width, height), drag_time)
                         ThunderController.random_sleep(0.4, 0.6)
+                    else:
+                        break
                     low_high = Onmyoji.hundred_ghosts_throw_height
                     throw_pool = [((i * 180, low_high[0]), ((i + 1) * 180, low_high[1])) for i in range(1, 5)]
                     begin_time = time.time()
@@ -605,65 +608,64 @@ class Cracker(threading.Thread):
         ThunderController.random_sleep(1.5, 3)
         self.accept_invite(False)
 
-    def group_break_through(self, times: int):
-        for _ in range(times):
-            if not self.is_home_page_or_not():
-                self.any_pages_back_to_home_page()
-            ThunderController.random_sleep()
-            ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
-                                           Onmyoji.home_page_explore_right_down)
-            ThunderController.random_sleep(1.5, 3)
-            exist, location = ThunderController.wait_picture(self.index, 2,
-                                                             ThunderController.share_path + '/breakthrough_icon.png')
+    def group_break_through(self):
+        if not self.is_home_page_or_not():
+            self.any_pages_back_to_home_page()
+        ThunderController.random_sleep()
+        ThunderController.random_click(self.index, Onmyoji.home_page_explore_left_up,
+                                       Onmyoji.home_page_explore_right_down)
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path + '/breakthrough_icon.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        exist, location = ThunderController.wait_picture(self.index, 2,
+                                                         ThunderController.share_path +
+                                                         '/group_break_through_icon.png')
+        if exist:
+            ThunderController.touch(self.index, ThunderController.cheat(location))
+        ThunderController.random_sleep(1.5, 3)
+        scroll = False
+        not_exist_times = 0
+        while True:
+            exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
             if exist:
                 ThunderController.touch(self.index, ThunderController.cheat(location))
-            ThunderController.random_sleep(1.5, 3)
-            exist, location = ThunderController.wait_picture(self.index, 2,
-                                                             ThunderController.share_path +
-                                                             '/group_break_through_icon.png')
+            exist, location = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
+                                                             '/group_break_through_flag.png')
             if exist:
-                ThunderController.touch(self.index, ThunderController.cheat(location))
-            ThunderController.random_sleep(1.5, 3)
-            scroll = False
-            not_exist_times = 0
-            while True:
-                exist, location, template = ThunderController.check_picture_list(self.index, Onmyoji.victory)
+                exist, location = ThunderController.wait_picture(self.index, 1,
+                                                                 ThunderController.share_path +
+                                                                 '/group_break_through_target.png')
                 if exist:
+                    not_exist_times = 0
                     ThunderController.touch(self.index, ThunderController.cheat(location))
-                exist, location = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
-                                                                 '/group_break_through_flag.png')
-                if exist:
+                    ThunderController.random_sleep()
+                    exist, _ = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
+                                                              '/group_tickets_not_enough.png')
+                    if exist:
+                        break
                     exist, location = ThunderController.wait_picture(self.index, 1,
                                                                      ThunderController.share_path +
-                                                                     '/group_break_through_target.png')
+                                                                     '/attack_star.png')
                     if exist:
-                        not_exist_times = 0
                         ThunderController.touch(self.index, ThunderController.cheat(location))
-                        ThunderController.random_sleep()
-                        exist, _ = ThunderController.wait_picture(self.index, 1, ThunderController.share_path +
-                                                                  '/group_tickets_not_enough.png')
-                        if exist:
-                            break
-                        exist, location = ThunderController.wait_picture(self.index, 1,
-                                                                         ThunderController.share_path +
-                                                                         '/attack_star.png')
-                        if exist:
-                            ThunderController.touch(self.index, ThunderController.cheat(location))
-                    else:
-                        scroll = True
-                        not_exist_times += 1
-                if scroll:
-                    exist, location = ThunderController.wait_picture(self.index, 2,
-                                                                     ThunderController.share_path +
-                                                                     '/group_break_through_scroll.png')
-                    if exist:
-                        flag = random.uniform(self.index, 1) > 0.6
-                        ThunderController.swipe(0, location[:2],
-                                                (location[0], location[1] - 120 if flag else location[1] + 120),
-                                                1800)
-                        scroll = False
-                if not_exist_times >= 5:
-                    break
+                else:
+                    scroll = True
+                    not_exist_times += 1
+            if scroll:
+                exist, location = ThunderController.wait_picture(self.index, 2,
+                                                                 ThunderController.share_path +
+                                                                 '/group_break_through_scroll.png')
+                if exist:
+                    flag = random.uniform(self.index, 1) > 0.75
+                    ThunderController.swipe(0, location[:2],
+                                            (location[0], location[1] - 120 if flag else location[1] + 120),
+                                            1800)
+                    scroll = False
+            if not_exist_times >= 5:
+                break
         self.any_pages_back_to_home_page()
 
 
@@ -672,7 +674,7 @@ def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     c0 = Cracker(0, [['accept_invite']])
     c1 = Cracker(1, [['accept_invite']])
-    c2 = Cracker(2, [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
+    c2 = Cracker(2, [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
     # c3 = Cracker(3, [['accept_invite', False]])
     # c0.start()
     # c1.start()
@@ -681,13 +683,17 @@ def main():
     # c3.chapter_solo()
     # c0.chapter_solo()
     # c0.solo_mode()
-    # c0.personal_break_through()
+    c0.personal_break_through()
     # c1 = Cracker(1, [['hundred_ghosts']])
     # c2 = Cracker(2, [['hundred_ghosts']])
     # c1.start()
     # c2.start()
     # c0.mitama_or_awake_invite('mitama', '10', [('cross', 'ybymq'), ('cross', 'ybyls')])
-    c0.group_break_through(1)
+    # c0.open_close_buff('mitama', True)
+    # c0.accept_invite()
+    # os.system('shutdown -s -t 60')
+    # c0.hundred_ghosts(20)
+    # c0.group_break_through()
 
 
 if __name__ == '__main__':
