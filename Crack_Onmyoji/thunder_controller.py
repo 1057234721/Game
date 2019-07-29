@@ -16,9 +16,9 @@ from Crack_Onmyoji.thunder_player import ThunderPlayer
 
 
 class ThunderController:
-    console = r'E:\OnmyojiLibrary\ChangZhi\dnplayer2\dnconsole.exe '
-    ld = r'E:\OnmyojiLibrary\ChangZhi\dnplayer2\ld.exe '
-    share_path = r'Onmyoji_images\\'
+    console = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\dnconsole.exe '
+    ld = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\ld.exe '
+    share_path = 'Onmyoji_images\\'
     speak_out = win32com.client.Dispatch('SAPI.SPVOICE')
     conf = configparser.ConfigParser()
     file_path = './instruction/config.txt'
