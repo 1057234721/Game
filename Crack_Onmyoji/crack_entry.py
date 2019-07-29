@@ -82,10 +82,11 @@ def main():
     sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
     c0 = CrackService(0, [['accept_invite']])
     c1 = CrackService(1, [['accept_invite']])
-    c2 = CrackService(2, [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
+    c2 = CrackService(2,
+                      [['mitama_or_awake_invite', 'mitama', '10', False, 2, [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
     c0.start()
     c1.start()
-    # c2.start()
+    c2.start()
     # c0.personal_break_through()
 
 

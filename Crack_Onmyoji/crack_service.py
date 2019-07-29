@@ -66,11 +66,11 @@ class CrackService(Thread):
                 CrackController.random_sleep()
         self.any_pages_back_to_home_page()
 
-    def accept_invite(self, acceptor: bool = True) -> None:
+    def accept_invite(self, acceptor: bool = True, two_members: bool = True, count: int = 10000) -> None:
         auto_accept_flag = False
         auto_invite_flag = False
         inviter = not acceptor
-        count = 0
+        invite_count = 1
         while True:
             if acceptor:
                 if not auto_accept_flag:
@@ -101,9 +101,15 @@ class CrackService(Thread):
             exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
             if exist:
                 if template == 'Onmyoji_images\\battle_victory.png':
-                    CrackController.random_sleep(3, 4)
-                    count += 1
-                    print(count)
+                    if invite_count > count:
+                        break
+                    if two_members:
+                        CrackController.random_sleep(5, 6)
+                    else:
+                        CrackController.random_sleep(3, 4)
+                    if inviter:
+                        invite_count += 1
+                        print('--------------invite count', invite_count)
                     if acceptor:
                         continue
                 CrackController.touch(self.index, CrackController.cheat(location))
@@ -610,10 +616,13 @@ class CrackService(Thread):
                 CrackController.touch(self.index, CrackController.cheat(location))
             CrackController.random_sleep(12, 15)
 
-    def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
+    def mitama_or_awake_invite(self, mode: str, addition_arg: str, two_members: bool, count: int,
+                               column_name_list: [(str, str)]):
         self._invite_friend_to_team(mode, addition_arg, column_name_list)
         CrackController.random_sleep(1.5, 3)
-        self.accept_invite(False)
+        self.accept_invite(False, two_members, count)
+        self.leave_team()
+        self.any_pages_back_to_home_page()
 
     def group_break_through(self):
         if not self.is_home_page_or_not():
