@@ -1,7 +1,7 @@
 import glob
 
 
-class Onmyoji:
+class GameDetail:
     left_up_position = (0, 0)
     right_down_position = (1280, 720)
     invite = glob.glob(r'./Onmyoji_images/*_invite.png')
@@ -58,7 +58,7 @@ class Onmyoji:
 
     @staticmethod
     def get_user_name_by_index(index: int) -> str:
-        return Onmyoji.player[index]
+        return GameDetail.player[index]
 
     def __init__(self):
         self.mitama_battle_count = 0

@@ -9,12 +9,12 @@ import cv2
 import numpy
 import requests
 import win32com.client
-from Crack_Onmyoji.onmyoji_detail import Onmyoji
-from Crack_Onmyoji.template_loder import TemplateLoader
-from Crack_Onmyoji.player_detail import ThunderPlayer
+from Crack_Onmyoji.onmyoji_detail import GameDetail
+from Crack_Onmyoji.template_loader import TemplateLoader
+from Crack_Onmyoji.player_detail import PlayerDetail
 
 
-class ThunderController:
+class CrackController:
     console = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\dnconsole.exe '
     ld = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\ld.exe '
     share_path = 'Onmyoji_images\\'
@@ -28,7 +28,7 @@ class ThunderController:
     # fetch all thunder simulators list
     @staticmethod
     def get_list() -> list:
-        cmd = os.popen(ThunderController.console + 'list2')
+        cmd = os.popen(CrackController.console + 'list2')
         text = cmd.read()
         cmd.close()
         print("fetching all thunder simulators list......")
@@ -37,14 +37,14 @@ class ThunderController:
         for line in info:
             if len(line) > 1:
                 thunder_player_info = line.split(',')
-                result.append(ThunderPlayer(thunder_player_info))
+                result.append(PlayerDetail(thunder_player_info))
         return result
 
     # fetch all running thunder simulators list
     @staticmethod
     def get_running_list() -> list:
         result = list()
-        all_players = ThunderController.get_list()
+        all_players = CrackController.get_list()
         for player in all_players:
             if player.is_running() is True:
                 result.append(player)
@@ -53,7 +53,7 @@ class ThunderController:
     # test the specified index player is running or not
     @staticmethod
     def is_player_running(index: int) -> bool:
-        all_players = ThunderController.get_list()
+        all_players = CrackController.get_list()
         if index >= len(all_players):
             raise IndexError('%d is not exist' % index)
         return all_players[index].is_running()
@@ -61,7 +61,7 @@ class ThunderController:
     # run ld cmd command on specified index player
     @staticmethod
     def ld_cmd(index: int, command: str, silence: bool = True) -> str:
-        cmd = ThunderController.ld + '-s %d %s' % (index, command)
+        cmd = CrackController.ld + '-s %d %s' % (index, command)
         if silence:
             os.system(cmd)
             return ''
@@ -73,7 +73,7 @@ class ThunderController:
     # run console command
     @staticmethod
     def console_cmd(command: str, silence: bool = False) -> str:
-        cmd = ThunderController.console + " " + command
+        cmd = CrackController.console + " " + command
         if silence:
             os.system(cmd)
             return ''
@@ -85,39 +85,39 @@ class ThunderController:
     # install specified app, assuming the index player is running
     @staticmethod
     def install_app(index: int, path: str) -> str:
-        shutil.copy(path, ThunderController.share_path + str(index) + 'app_to_install.apk')
-        ThunderController.random_sleep()
-        return ThunderController.ld_cmd(index, 'pm install /sdcard/Pictures/' + str(index) + 'app_to_install.apk')
+        shutil.copy(path, CrackController.share_path + str(index) + 'app_to_install.apk')
+        CrackController.random_sleep()
+        return CrackController.ld_cmd(index, 'pm install /sdcard/Pictures/' + str(index) + 'app_to_install.apk')
 
     # uninstall specified app, assuming the index player is running
     @staticmethod
     def uninstall_app(index: int, package: str) -> str:
         command = 'uninstallapp --index %d --packagename %s' % (index, package)
-        return ThunderController.console_cmd(command, True)
+        return CrackController.console_cmd(command, True)
 
     # start specified app, assuming the index player is running
     @staticmethod
     def invoke_app(index: int, package: str) -> str:
         command = 'runapp --index %d --packagename %s' % (index, package)
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # stop specified app, assuming the index player is running
     @staticmethod
     def stop_app(index: int, package: str) -> str:
         command = 'killapp --index %d --packagename %s' % (index, package)
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # input word, assuming the index player is running
     @staticmethod
     def input_text(index: int, text: str) -> str:
         command = 'action --index %d --key call.input --value %s' % (index, text)
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # fetch installed app list, assuming the player is running
     @staticmethod
     def get_package_list(index: int) -> list:
         result = list()
-        text = ThunderController.ld_cmd(index, 'pm list packages', False)
+        text = CrackController.ld_cmd(index, 'pm list packages', False)
         info = text.split('\n')
         for i in info:
             if len(i) > 1:
@@ -127,44 +127,44 @@ class ThunderController:
     # test the specified app is installed or not, assuming the player is running
     @staticmethod
     def has_app_installed(index: int, package: str) -> bool:
-        if ThunderController.is_player_running(index) is False:
+        if CrackController.is_player_running(index) is False:
             return False
-        return "package:" + package in ThunderController.get_package_list(index)
+        return "package:" + package in CrackController.get_package_list(index)
 
     # start player and then start specified app, assuming the player is not running
     @staticmethod
     def launch_player_and_start_app(index: int, package: str = "null") -> str:
         command = 'launchex --index ' + str(index) + ' --packagename ' + package
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # reboot player and then start specified app, assuming the player is running
     @staticmethod
     def reboot_player_and_start_app(index: int, package: str = "null") -> str:
         command = 'action --index ' + str(index) + ' --key call.reboot --value ' + package
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # modify the player's location, assuming the player is running
     @staticmethod
     def modify_location(index: int, location: str) -> str:
         command = 'action --index ' + str(index) + ' --key call.locate --value ' + location
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # shutdown player, assuming the player is running
     @staticmethod
     def quit(index: int) -> str:
         command = 'quit --index ' + str(index)
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # modify the screen resolution, assuming the player is not running
     @staticmethod
     def set_screen_resolution(index: int, resolution: str) -> str:
         command = 'modify --index %d --resolution ' % index + resolution
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # tap or touch, assuming the player is running
     @staticmethod
     def touch(index: int, x_y: (int, int)) -> str:
-        return ThunderController.ld_cmd(index, 'input tap %d %d' % x_y)
+        return CrackController.ld_cmd(index, 'input tap %d %d' % x_y)
 
     # swipe, assuming the player is running
     @staticmethod
@@ -174,48 +174,48 @@ class ThunderController:
         x1 = coordinate_right_down[0]
         y1 = coordinate_right_down[1]
         if delay == 0:
-            return ThunderController.ld_cmd(index, 'input swipe %d %d %d %d' % (x0, y0, x1, y1))
+            return CrackController.ld_cmd(index, 'input swipe %d %d %d %d' % (x0, y0, x1, y1))
         else:
-            return ThunderController.ld_cmd(index, 'input swipe %d %d %d %d %d' % (x0, y0, x1, y1, delay))
+            return CrackController.ld_cmd(index, 'input swipe %d %d %d %d %d' % (x0, y0, x1, y1, delay))
 
     # copy player, assuming the player is not running
     @staticmethod
     def copy(name: str, index: int = 0) -> str:
         command = 'copy --name %s --from %d' % (name, index)
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # add player, assuming the player is not running
     @staticmethod
     def add(name: str) -> str:
         command = 'add --name %s' % name
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # set auto rotate, assuming the player is not running
     @staticmethod
     def auto_rotate(index: int, auto_rate: bool = False) -> str:
         rate = 1 if auto_rate else 0
         command = 'modify --index %d --autorotate %d' % (index, rate)
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # modify player info, assuming the player is not running
     @staticmethod
     def change_device_info(index: int) -> str:
         command = 'modify --index %d --imei auto --imsi' \
                   ' auto --simserial auto --androidid auto --mac auto' % index
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # modify CPU core number, assuming the player is not running
     @staticmethod
     def change_cpu_count(index: int, number: int) -> str:
         command = 'modify --index %d --cpu %d' % (index, number)
-        return ThunderController.console_cmd(command)
+        return CrackController.console_cmd(command)
 
     # fetch current activity xml, assuming the player is running
     @staticmethod
     def get_cur_activity_xml(index: int) -> str:
-        ThunderController.ld_cmd(index, 'uiautomator dump /sdcard/Pictures/activity.xml')
-        ThunderController.random_sleep()
-        file = open(ThunderController.share_path + 'activity.xml', 'r', encoding='utf-8')
+        CrackController.ld_cmd(index, 'uiautomator dump /sdcard/Pictures/activity.xml')
+        CrackController.random_sleep()
+        file = open(CrackController.share_path + 'activity.xml', 'r', encoding='utf-8')
         result = file.read()
         file.close()
         return result
@@ -223,7 +223,7 @@ class ThunderController:
     # fetch current activity, assuming the player is running
     @staticmethod
     def get_activity_name(index: int) -> str:
-        text = ThunderController.ld_cmd(index, '"dumpsys activity top | grep ACTIVITY"', False)
+        text = CrackController.ld_cmd(index, '"dumpsys activity top | grep ACTIVITY"', False)
         text = text.split(' ')
         for index, word in enumerate(text):
             if len(word) == 0:
@@ -236,17 +236,17 @@ class ThunderController:
     @staticmethod
     def wait_activity(index: int, activity: str, timeout: int) -> bool:
         for i in range(timeout):
-            if ThunderController.get_activity_name(index) == activity:
+            if CrackController.get_activity_name(index) == activity:
                 return True
-            ThunderController.random_sleep()
+            CrackController.random_sleep()
         return False
 
     # use ld_cmd to make screen shot and return the path of the picture, assuming the player is running
     @staticmethod
     def screen_shot(index: int, sleep_time_low: float = 0.4, sleep_time_high: float = 0.6) -> str:
-        ThunderController.ld_cmd(index, 'screencap -p /sdcard/Pictures/' + str(index) + 'apk_scr.png')
-        ThunderController.random_sleep(sleep_time_low, sleep_time_high)
-        return ThunderController.share_path + str(index) + 'apk_scr.png'
+        CrackController.ld_cmd(index, 'screencap -p /sdcard/Pictures/' + str(index) + 'apk_scr.png')
+        CrackController.random_sleep(sleep_time_low, sleep_time_high)
+        return CrackController.share_path + str(index) + 'apk_scr.png'
 
     # find the matched picture, assuming the player is running
     @staticmethod
@@ -254,7 +254,7 @@ class ThunderController:
             [(int, int, int, int)]:
         locations_to_return = []
         screen_shot = cv2.imread(screen)
-        template_picture = ThunderController.templates_dict.get(template)
+        template_picture = CrackController.templates_dict.get(template)
         result = cv2.matchTemplate(screen_shot, template_picture, cv2.TM_CCOEFF_NORMED)
         locations = numpy.where(result >= threshold)
         h, w = template_picture.shape[:-1]
@@ -294,7 +294,7 @@ class ThunderController:
     def find_single_picture(screen: str, template: str, threshold: float = 0.85, debug: bool = False) -> \
             ((int, int, int, int), float):
         screen_shot = cv2.imread(screen)
-        template_picture = ThunderController.templates_dict.get(template)
+        template_picture = CrackController.templates_dict.get(template)
         result = cv2.matchTemplate(screen_shot, template_picture, cv2.TM_CCOEFF_NORMED)
         minimum_value, maximum_value, minimum_value_location, maximum_value_location = cv2.minMaxLoc(result)
         h, w = template_picture.shape[:-1]
@@ -329,11 +329,11 @@ class ThunderController:
 
         count = 0
         while count < timeout:
-            screen = ThunderController.screen_shot(index, sleep_time_low, sleep_time_high)
+            screen = CrackController.screen_shot(index, sleep_time_low, sleep_time_high)
             print(str(index), ' is waiting... ', template)
-            location, _ = ThunderController.find_single_picture(screen, template, threshold)
+            location, _ = CrackController.find_single_picture(screen, template, threshold)
             if location is None:
-                ThunderController.random_sleep()
+                CrackController.random_sleep()
                 count += 1
                 continue
             print(str(index), ' waiting and find... ', template)
@@ -346,11 +346,11 @@ class ThunderController:
     @staticmethod
     def check_picture_list(index: int, templates: list, threshold: float = 0.85, sleep_time_low: float = 0.4,
                            sleep_time_high: float = 0.6) -> (bool, (int, int, int, int), str):
-        screen = ThunderController.screen_shot(index, sleep_time_low, sleep_time_high)
+        screen = CrackController.screen_shot(index, sleep_time_low, sleep_time_high)
         check_list = []
         for template_index, template in enumerate(templates):
             print(str(index), ' is checking... ', template)
-            location, max_value = ThunderController.find_single_picture(screen, template, threshold)
+            location, max_value = CrackController.find_single_picture(screen, template, threshold)
             if max_value != -1:
                 print(str(index), ' has a backup template ', template)
                 check_list.append((max_value, (location, template)))
@@ -365,7 +365,7 @@ class ThunderController:
     # fetch the number (str) from the picture by using the api, must be png format
     @staticmethod
     def fetch_number_from_picture(path: str) -> str:
-        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/numbers?access_token=" + ThunderController.api
+        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/numbers?access_token=" + CrackController.api
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -382,7 +382,7 @@ class ThunderController:
     # fetch the string (str) from the picture by using the api, must be png format
     @staticmethod
     def fetch_string_from_picture(path: str) -> str:
-        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + ThunderController.api
+        url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + CrackController.api
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -400,20 +400,20 @@ class ThunderController:
     @staticmethod
     def intercept_rectangle_from_picture(index: int, left_up: (int, int),
                                          right_down: (int, int)) -> str:
-        path = ThunderController.screen_shot(index)
+        path = CrackController.screen_shot(index)
         image = cv2.imread(path)
         rectangle = image[left_up[1]:right_down[1], left_up[0]:right_down[0]]
-        save_path_name = ThunderController.share_path + str(index) + "intercepted_picture.png"
+        save_path_name = CrackController.share_path + str(index) + "intercepted_picture.png"
         cv2.imwrite(save_path_name, rectangle)
         return save_path_name
 
     # given a rectangle and click in it randomly, assuming the player is running
     @staticmethod
-    def random_click(index: int, left_up: (int, int) = Onmyoji.left_up_position,
-                     right_down: (int, int) = Onmyoji.right_down_position) -> str:
+    def random_click(index: int, left_up: (int, int) = GameDetail.left_up_position,
+                     right_down: (int, int) = GameDetail.right_down_position) -> str:
         x = random.uniform(left_up[0], right_down[0])
         y = random.uniform(left_up[1], right_down[1])
-        return ThunderController.touch(index, (x, y))
+        return CrackController.touch(index, (x, y))
 
     # random sleep to avoid detection
     @staticmethod
@@ -424,7 +424,7 @@ class ThunderController:
     # use windows api to speak out some words
     @staticmethod
     def speak(word: str) -> None:
-        ThunderController.speak_out.Speak(word)
+        CrackController.speak_out.Speak(word)
 
     # click different location to avoid game detection
     @staticmethod
