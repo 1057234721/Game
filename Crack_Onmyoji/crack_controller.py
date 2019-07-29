@@ -9,7 +9,7 @@ import cv2
 import numpy
 import requests
 import win32com.client
-from Crack_Onmyoji.onmyoji_detail import GameDetail
+from Crack_Onmyoji.game_detail import GameDetail
 from Crack_Onmyoji.template_loader import TemplateLoader
 from Crack_Onmyoji.player_detail import PlayerDetail
 

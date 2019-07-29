@@ -1,7 +1,7 @@
 import random
 import time
 from Crack_Onmyoji.crack_controller import CrackController
-from Crack_Onmyoji.onmyoji_detail import GameDetail
+from Crack_Onmyoji.game_detail import GameDetail
 
 
 class CrackService:
