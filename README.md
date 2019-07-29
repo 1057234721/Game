@@ -24,16 +24,18 @@ re
 # Code Structure
 + Game
 	+ Crack_Onmyoji
-		+ logs (Store logs)
-		+ instruction (Config.txt is required to store Baidu OCR API Key)
+		+ logs (Store logs, required)
+		+ instruction (Config.txt is required to store Baidu OCR API Key, required)
 		+ old (Deprecated)
 		+ Onmyoji_images (Match template pictures)
 		+ test (For test)
-		+ crack_onmyoji.py (Code entry, highest level)
+		+ crack_service.py (service, service level)
 		+ log_recorder.py (Write log, util)
-		+ onmyoji.py (Onmyoji class to store some global in-game properties and account info)
-		+ thunder_controller.py (Service, action level)
-		+ thunder_player.py (Player class to store player info) 
+		+ game_detail.py (GameDetail class to store some global in-game properties and account info)
+		+ crack_controller.py (controller, action level)
+		+ player_detail.py (PlayerDetail class to store player info) 
+		+ template_loader.py (load templates in numpy format into memory, util)
+		+ crack_entry.py (entry, highest level)
 # Functionality
 1. Awakening and Mitama automation in team mode  
 2. Awakening, Mitama, Original Fire and Imperial spirit (bad translation xd) automation in solo mode  

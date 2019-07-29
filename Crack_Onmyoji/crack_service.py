@@ -1,16 +1,30 @@
 import random
+import re
+import sys
 import time
+from threading import Thread
+
 from Crack_Onmyoji.crack_controller import CrackController
 from Crack_Onmyoji.game_detail import GameDetail
+from Crack_Onmyoji.log_recorder import LogRecorder
 
 
-class CrackService:
+class CrackService(Thread):
 
     def __init__(self, index: int, task_list: list = None, onmyoji: GameDetail = None) -> None:
+        super().__init__()
         self.index = index
         self.start_time = time.ctime()
         self.task_list: list = task_list
         self.onmyoji = onmyoji
+
+    def run(self) -> None:
+        while len(self.task_list) != 0:
+            current_task = self.task_list.pop(0)
+            if len(current_task) == 1:
+                eval("self." + current_task[0])()
+            else:
+                eval("self." + current_task[0])(*current_task[1:])
 
     def start_onmyoji(self) -> None:
         if CrackController.is_player_running(self.index):
@@ -43,7 +57,7 @@ class CrackService:
     def leave_team(self) -> None:
         while True:
             exist, location = CrackController.wait_picture(self.index, 3, CrackController.share_path +
-                                                             "team_leave.png")
+                                                           "team_leave.png")
             if not exist:
                 break
             else:
@@ -51,7 +65,7 @@ class CrackService:
                 CrackController.random_sleep()
                 _, location = CrackController.wait_picture(self.index, 3,
                                                            CrackController.share_path +
-                                                             "team_confirm_leave.png")
+                                                           "team_confirm_leave.png")
                 CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep()
         self.any_pages_back_to_home_page()
@@ -182,19 +196,19 @@ class CrackService:
             if refresh:
                 exist, location = CrackController.wait_picture(self.index, 1,
                                                                CrackController.share_path +
-                                                                 'breakthrough_refresh.png')
+                                                               'breakthrough_refresh.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                     CrackController.random_sleep()
                     exist, location = CrackController.wait_picture(self.index, 10,
                                                                    CrackController.share_path +
-                                                                     'breakthrough_refresh_confirm.png')
+                                                                   'breakthrough_refresh_confirm.png')
                     if exist:
                         CrackController.touch(self.index, CrackController.cheat(location))
                         CrackController.random_sleep(3, 4)
                         screen = CrackController.screen_shot(self.index)
                         locations = CrackController.find_all_pictures(screen, CrackController.share_path +
-                                                                        'zero_star.png', 0.95)
+                                                                      'zero_star.png', 0.95)
                         print('zero star number: ', len(locations))
                         if len(locations) >= 3:
                             refresh = False
@@ -229,7 +243,7 @@ class CrackService:
                 CrackController.random_sleep(1.5, 3)
                 exist, location = CrackController.wait_picture(self.index, 2,
                                                                CrackController.share_path + addition_arg +
-                                                                 '_mitama.png')
+                                                               '_mitama.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(1.5, 3)
@@ -241,7 +255,7 @@ class CrackService:
                 CrackController.random_sleep(1.5, 3)
                 exist, location = CrackController.wait_picture(self.index, 2,
                                                                CrackController.share_path + addition_arg +
-                                                                 '_awake.png')
+                                                               '_awake.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(1.5, 3)
@@ -253,7 +267,7 @@ class CrackService:
                 CrackController.random_sleep(1.5, 3)
                 exist, location = CrackController.wait_picture(self.index, 2,
                                                                CrackController.share_path + addition_arg +
-                                                                 '_imperial_spirit.png')
+                                                               '_imperial_spirit.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(1.5, 3)
@@ -297,7 +311,7 @@ class CrackService:
                     while True:
                         exist, location = CrackController.wait_picture(self.index, 1,
                                                                        CrackController.share_path +
-                                                                         'level_one_flag.png')
+                                                                       'level_one_flag.png')
                         if exist:
                             height = random.randint(*GameDetail.chapter_attendant_position_3_drag_height)
                             width = random.randint(*GameDetail.chapter_attendant_position_3_drag_width)
@@ -324,9 +338,9 @@ class CrackService:
                 CrackController.touch(self.index, CrackController.cheat(location))
             exist, _, _ = CrackController.check_picture_list(self.index,
                                                              [CrackController.share_path +
-                                                                'fix_team_flag.png',
+                                                              'fix_team_flag.png',
                                                               CrackController.share_path +
-                                                                'out2_of_chapter_flag.png'])
+                                                              'out2_of_chapter_flag.png'])
             if exist:
                 break
 
@@ -382,13 +396,13 @@ class CrackService:
                     if template == 'Onmyoji_images\\gift_chapter_flag.png':
                         exist, location = CrackController.wait_picture(self.index, 1,
                                                                        CrackController.share_path +
-                                                                         'backward3_close.png')
+                                                                       'backward3_close.png')
                         if exist:
                             CrackController.touch(self.index, CrackController.cheat(location))
                         CrackController.random_sleep()
                         exist, location = CrackController.wait_picture(self.index, 1,
                                                                        CrackController.share_path +
-                                                                         'backward3_confirm_close.png')
+                                                                       'backward3_confirm_close.png')
                         if exist:
                             CrackController.touch(self.index, CrackController.cheat(location))
                     break
@@ -487,12 +501,14 @@ class CrackService:
             mitama_flag = self._buff_check_in_location(GameDetail.mitama_buff_check_left_up,
                                                        GameDetail.mitama_buff_check_right_down)
             if mitama_flag ^ buff_option:
-                CrackController.random_click(self.index, GameDetail.mitama_buff_left_up, GameDetail.mitama_buff_right_down)
+                CrackController.random_click(self.index, GameDetail.mitama_buff_left_up,
+                                             GameDetail.mitama_buff_right_down)
         if buff_type == 'awake':
             awake_flag = self._buff_check_in_location(GameDetail.awake_buff_check_left_up,
                                                       GameDetail.awake_buff_check_right_down)
             if awake_flag ^ buff_option:
-                CrackController.random_click(self.index, GameDetail.awake_buff_left_up, GameDetail.awake_buff_right_down)
+                CrackController.random_click(self.index, GameDetail.awake_buff_left_up,
+                                             GameDetail.awake_buff_right_down)
         CrackController.random_sleep()
         exist, location = CrackController.wait_picture(self.index, 1,
                                                        CrackController.share_path + "bonus.png")
@@ -522,13 +538,13 @@ class CrackService:
                 CrackController.random_sleep(1.5, 3)
                 exist, location = CrackController.wait_picture(self.index, 2,
                                                                CrackController.share_path +
-                                                                 'dragon_mitama.png')
+                                                               'dragon_mitama.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(1.5, 3)
                 exist, location = CrackController.wait_picture(self.index, 2,
                                                                CrackController.share_path +
-                                                                 'mitama_level_' + addition_arg + '.png')
+                                                               'mitama_level_' + addition_arg + '.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(1.5, 3)
@@ -540,7 +556,7 @@ class CrackService:
                 CrackController.random_sleep(1.5, 3)
                 exist, location = CrackController.wait_picture(self.index, 1,
                                                                CrackController.share_path + addition_arg +
-                                                                 '_awake.png')
+                                                               '_awake.png')
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(1.5, 3)
@@ -572,14 +588,14 @@ class CrackService:
             CrackController.random_sleep(1.5, 3)
             exist, location = CrackController.wait_picture(self.index, 1,
                                                            CrackController.share_path + 'invite\\' + column_name[
-                                                                 0] + '_column.png')
+                                                               0] + '_column.png')
             if exist:
                 CrackController.touch(self.index, CrackController.cheat(location))
             CrackController.random_sleep(1.5, 3)
             exist, location = CrackController.wait_picture(self.index, 1,
                                                            CrackController.share_path + 'invite\\name_' +
                                                            column_name[
-                                                                 1] + '.png')
+                                                               1] + '.png')
             if exist:
                 CrackController.touch(self.index, CrackController.cheat(location))
             CrackController.random_sleep(1.5, 3)
@@ -608,7 +624,7 @@ class CrackService:
         CrackController.random_sleep(1.5, 3)
         exist, location = CrackController.wait_picture(self.index, 2,
                                                        CrackController.share_path +
-                                                         'group_break_through_icon.png')
+                                                       'group_break_through_icon.png')
         if exist:
             CrackController.touch(self.index, CrackController.cheat(location))
         CrackController.random_sleep(1.5, 3)
@@ -619,22 +635,22 @@ class CrackService:
             if exist:
                 CrackController.touch(self.index, CrackController.cheat(location))
             exist, location = CrackController.wait_picture(self.index, 1, CrackController.share_path +
-                                                             'group_break_through_flag.png')
+                                                           'group_break_through_flag.png')
             if exist:
                 exist, location = CrackController.wait_picture(self.index, 1,
                                                                CrackController.share_path +
-                                                                 'group_break_through_target.png')
+                                                               'group_break_through_target.png')
                 if exist:
                     not_exist_times = 0
                     CrackController.touch(self.index, CrackController.cheat(location))
                     CrackController.random_sleep()
                     exist, _ = CrackController.wait_picture(self.index, 1, CrackController.share_path +
-                                                              'group_tickets_not_enough.png')
+                                                            'group_tickets_not_enough.png')
                     if exist:
                         break
                     exist, location = CrackController.wait_picture(self.index, 1,
                                                                    CrackController.share_path +
-                                                                     'attack_star.png')
+                                                                   'attack_star.png')
                     if exist:
                         CrackController.touch(self.index, CrackController.cheat(location))
                 else:
@@ -643,7 +659,7 @@ class CrackService:
             if scroll:
                 exist, location = CrackController.wait_picture(self.index, 2,
                                                                CrackController.share_path +
-                                                                 'group_break_through_scroll.png')
+                                                               'group_break_through_scroll.png')
                 if exist:
                     flag = random.uniform(self.index, 1) > 0.75
                     CrackController.swipe(0, location[:2],
@@ -653,3 +669,18 @@ class CrackService:
             if not_exist_times >= 5:
                 break
         self.any_pages_back_to_home_page()
+
+
+def main():
+    run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
+    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
+    c0 = CrackService(0, [['accept_invite']])
+    c1 = CrackService(1, [['accept_invite']])
+    c2 = CrackService(2, [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
+    c0.start()
+    c1.start()
+    c2.start()
+
+
+if __name__ == '__main__':
+    main()
