@@ -141,3 +141,7 @@ from Crack_Onmyoji.game_detail import GameDetail
 #     in range(6)]
 # print(throw_pool)
 print(time.strftime("%Y %m %d %H:%M:%S", time.localtime()))
+s = time.time()
+time.sleep(1)
+ss = time.time()
+print(ss - s)
