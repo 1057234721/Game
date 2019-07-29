@@ -1,8 +1,11 @@
+import re
+import sys
 import time
 from threading import Thread
 
 from Crack_Onmyoji.crack_controller import CrackController
 from Crack_Onmyoji.crack_service import CrackService
+from Crack_Onmyoji.log_recorder import LogRecorder
 
 
 class CrackEntry:
@@ -72,3 +75,18 @@ class CrackEntry:
                         main_task_threads.append(Thread(target=self.crack[i].accept_invite))
             else:
                 main_task_threads.append(Thread(target=self.crack[0].accept_invite))
+
+
+def main():
+    run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
+    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
+    c0 = CrackService(0, [['accept_invite']])
+    c1 = CrackService(1, [['accept_invite']])
+    c2 = CrackService(2, [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
+    c0.start()
+    c1.start()
+    c2.start()
+
+
+if __name__ == '__main__':
+    main()
