@@ -104,7 +104,7 @@ class CrackService(Thread):
                     if invite_count > count:
                         break
                     if two_members:
-                        CrackController.random_sleep(7, 8)
+                        CrackController.random_sleep(10, 12)
                     else:
                         CrackController.random_sleep(3, 4)
                     if inviter:
