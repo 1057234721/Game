@@ -4,16 +4,16 @@ import glob
 class GameDetail:
     left_up_position = (0, 0)
     right_down_position = (1280, 720)
-    invite = glob.glob(r'./Onmyoji_images/*_invite.png')
-    victory = glob.glob(r'./Onmyoji_images/*_victory.png')
-    close = glob.glob(r'./Onmyoji_images/*close.png')
-    chapter_battle = glob.glob(r'./Onmyoji_images/*_battle.png')
-    out_of_chapter = glob.glob(r'./Onmyoji_images/*_chapter_flag.png')
+    invite = glob.glob(r'Onmyoji_images\*_invite.png')
+    victory = glob.glob(r'Onmyoji_images\*_victory.png')
+    close = glob.glob(r'Onmyoji_images\*close.png')
+    chapter_battle = glob.glob(r'Onmyoji_images\*_battle.png')
+    out_of_chapter = glob.glob(r'Onmyoji_images\*_chapter_flag.png')
     game_package_name = "com.netease.onmyoji"
     game_video_activity_name = "com.netease.onmyoji/.VideoPlayer"
     player = ["player_master", "player_attendant_one", "player_attendant_two"]
-    champion_class = glob.glob(r'./Onmyoji_images/*class.png')
-    hundred_ghosts = glob.glob(r'./Onmyoji_images/*_hundred_ghosts.png')
+    champion_class = glob.glob(r'Onmyoji_images\*class.png')
+    hundred_ghosts = glob.glob(r'Onmyoji_images\*_hundred_ghosts.png')
     chapter_drag_height = (120, 140)
     chapter_drag_left = (100, 200)
     chapter_drag_right = (1080, 1180)
