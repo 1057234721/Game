@@ -16,9 +16,9 @@ from Crack_Onmyoji.thunder_player import ThunderPlayer
 
 
 class ThunderController:
-    console = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\dnconsole.exe '
-    ld = 'E:\\OnmyojiLibrary\\ChangZhi\\dnplayer2\\ld.exe '
-    share_path = '.\\Onmyoji_images'
+    console = r'E:\OnmyojiLibrary\ChangZhi\dnplayer2\dnconsole.exe '
+    ld = r'E:\OnmyojiLibrary\ChangZhi\dnplayer2\ld.exe '
+    share_path = r'Onmyoji_images\\'
     speak_out = win32com.client.Dispatch('SAPI.SPVOICE')
     conf = configparser.ConfigParser()
     file_path = './instruction/config.txt'
@@ -86,7 +86,7 @@ class ThunderController:
     # install specified app, assuming the index player is running
     @staticmethod
     def install_app(index: int, path: str) -> str:
-        shutil.copy(path, ThunderController.share_path + '/' + str(index) + 'app_to_install.apk')
+        shutil.copy(path, ThunderController.share_path + str(index) + 'app_to_install.apk')
         ThunderController.random_sleep()
         return ThunderController.ld_cmd(index, 'pm install /sdcard/Pictures/' + str(index) + 'app_to_install.apk')
 
@@ -216,7 +216,7 @@ class ThunderController:
     def get_cur_activity_xml(index: int) -> str:
         ThunderController.ld_cmd(index, 'uiautomator dump /sdcard/Pictures/activity.xml')
         ThunderController.random_sleep()
-        file = open(ThunderController.share_path + '/activity.xml', 'r', encoding='utf-8')
+        file = open(ThunderController.share_path + 'activity.xml', 'r', encoding='utf-8')
         result = file.read()
         file.close()
         return result
@@ -247,7 +247,7 @@ class ThunderController:
     def screen_shot(index: int, sleep_time_low: float = 0.4, sleep_time_high: float = 0.6) -> str:
         ThunderController.ld_cmd(index, 'screencap -p /sdcard/Pictures/' + str(index) + 'apk_scr.png')
         ThunderController.random_sleep(sleep_time_low, sleep_time_high)
-        return ThunderController.share_path + '/' + str(index) + 'apk_scr.png'
+        return ThunderController.share_path + str(index) + 'apk_scr.png'
 
     # find the matched picture, assuming the player is running
     @staticmethod
@@ -404,8 +404,9 @@ class ThunderController:
         path = ThunderController.screen_shot(index)
         image = cv2.imread(path)
         rectangle = image[left_up[1]:right_down[1], left_up[0]:right_down[0]]
-        cv2.imwrite(ThunderController.share_path + "/" + str(index) + "intercepted_picture.png", rectangle)
-        return ThunderController.share_path + "/" + str(index) + "intercepted_picture.png"
+        save_path_name = ThunderController.share_path + str(index) + "intercepted_picture.png"
+        cv2.imwrite(save_path_name, rectangle)
+        return save_path_name
 
     # given a rectangle and click in it randomly, assuming the player is running
     @staticmethod
