@@ -9,10 +9,9 @@ import cv2
 import numpy
 import requests
 import win32com.client
-
-from Crack_Onmyoji.onmyoji import Onmyoji
+from Crack_Onmyoji.onmyoji_detail import Onmyoji
 from Crack_Onmyoji.template_loder import TemplateLoader
-from Crack_Onmyoji.thunder_player import ThunderPlayer
+from Crack_Onmyoji.player_detail import ThunderPlayer
 
 
 class ThunderController:

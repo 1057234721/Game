@@ -1,30 +1,16 @@
-import os
 import random
-import threading
-import re
-import sys
 import time
-from Crack_Onmyoji.log_recorder import LogRecorder
-from Crack_Onmyoji.thunder_controller import ThunderController
-from Crack_Onmyoji.onmyoji import Onmyoji
+from Crack_Onmyoji.crack_controller import ThunderController
+from Crack_Onmyoji.onmyoji_detail import Onmyoji
 
 
-class Cracker(threading.Thread):
+class Cracker:
 
     def __init__(self, index: int, task_list: list = None, onmyoji: Onmyoji = None) -> None:
-        super(Cracker, self).__init__()
         self.index = index
         self.start_time = time.ctime()
         self.task_list: list = task_list
         self.onmyoji = onmyoji
-
-    def run(self) -> None:
-        while len(self.task_list) != 0:
-            current_task = self.task_list.pop(0)
-            if len(current_task) == 1:
-                eval("self." + current_task[0])()
-            else:
-                eval("self." + current_task[0])(*current_task[1:])
 
     def start_onmyoji(self) -> None:
         if ThunderController.is_player_running(self.index):
@@ -667,34 +653,3 @@ class Cracker(threading.Thread):
             if not_exist_times >= 5:
                 break
         self.any_pages_back_to_home_page()
-
-
-def main():
-    run_time = time.strftime("%Y %m %d %H:%M:%S", time.localtime())
-    sys.stdout = LogRecorder('./logs/' + '_'.join(re.split(r'[\\ |:]', run_time)) + '_log.txt')
-    c0 = Cracker(0, [['accept_invite']])
-    c1 = Cracker(1, [['accept_invite']])
-    c2 = Cracker(2, [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
-    # c3 = Cracker(3, [['accept_invite', False]])
-    # c0.start()
-    # c1.start()
-    # c2.start()
-    # c3.start()
-    # c3.chapter_solo()
-    # c0.chapter_solo()
-    # c0.solo_mode()
-    c0.personal_break_through()
-    # c1 = Cracker(1, [['hundred_ghosts']])
-    # c2 = Cracker(2, [['hundred_ghosts']])
-    # c1.start()
-    # c2.start()
-    # c0.mitama_or_awake_invite('mitama', '10', [('cross', 'ybymq'), ('cross', 'ybyls')])
-    # c0.open_close_buff('mitama', True)
-    # c0.accept_invite()
-    # os.system('shutdown -s -t 60')
-    # c0.hundred_ghosts(20)
-    # c0.group_break_through()
-
-
-if __name__ == '__main__':
-    main()
