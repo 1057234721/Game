@@ -11,6 +11,7 @@ import requests
 import win32com.client
 
 from Crack_Onmyoji.onmyoji import Onmyoji
+from Crack_Onmyoji.template_loder import TemplateLoader
 from Crack_Onmyoji.thunder_player import ThunderPlayer
 
 
@@ -23,6 +24,7 @@ class ThunderController:
     file_path = './instruction/config.txt'
     conf.read(file_path)
     api = conf.get('config', 'api')
+    templates_dict = TemplateLoader.load_templates()
 
     # fetch all thunder simulators list
     @staticmethod
@@ -253,7 +255,7 @@ class ThunderController:
             [(int, int, int, int)]:
         locations_to_return = []
         screen_shot = cv2.imread(screen)
-        template_picture = cv2.imread(template)
+        template_picture = ThunderController.templates_dict.get(template)
         result = cv2.matchTemplate(screen_shot, template_picture, cv2.TM_CCOEFF_NORMED)
         locations = numpy.where(result >= threshold)
         h, w = template_picture.shape[:-1]
@@ -293,7 +295,7 @@ class ThunderController:
     def find_single_picture(screen: str, template: str, threshold: float = 0.85, debug: bool = False) -> \
             ((int, int, int, int), float):
         screen_shot = cv2.imread(screen)
-        template_picture = cv2.imread(template)
+        template_picture = ThunderController.templates_dict.get(template)
         result = cv2.matchTemplate(screen_shot, template_picture, cv2.TM_CCOEFF_NORMED)
         minimum_value, maximum_value, minimum_value_location, maximum_value_location = cv2.minMaxLoc(result)
         h, w = template_picture.shape[:-1]
