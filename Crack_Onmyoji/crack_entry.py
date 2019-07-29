@@ -85,7 +85,8 @@ def main():
     c2 = CrackService(2, [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')]]])
     c0.start()
     c1.start()
-    c2.start()
+    # c2.start()
+    # c0.personal_break_through()
 
 
 if __name__ == '__main__':

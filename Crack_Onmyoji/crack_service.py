@@ -72,12 +72,19 @@ class CrackService(Thread):
         inviter = not acceptor
         count = 0
         while True:
-            if acceptor and not auto_accept_flag:
-                exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
+            if acceptor:
+                if not auto_accept_flag:
+                    exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
+                    if exist:
+                        if template == 'Onmyoji_images\\team2_invite.png':
+                            auto_accept_flag = True
+                        CrackController.touch(self.index, CrackController.cheat(location))
+                exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
                 if exist:
-                    if template == 'Onmyoji_images\\team2_invite.png':
-                        auto_accept_flag = True
-                    CrackController.touch(self.index, CrackController.cheat(location))
+                    if template == 'Onmyoji_images\\battle_victory.png':
+                        auto_accept_flag = False
+                        self.leave_team()
+                        continue
             if inviter and not auto_invite_flag:
                 exist, location = CrackController.wait_picture(
                     self.index, 1,
@@ -97,6 +104,8 @@ class CrackService(Thread):
                     CrackController.random_sleep(3, 4)
                     count += 1
                     print(count)
+                    if acceptor:
+                        continue
                 CrackController.touch(self.index, CrackController.cheat(location))
 
     def personal_break_through(self) -> None:
@@ -665,5 +674,3 @@ class CrackService(Thread):
             if not_exist_times >= 5:
                 break
         self.any_pages_back_to_home_page()
-
-
