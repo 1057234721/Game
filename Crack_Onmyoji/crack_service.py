@@ -109,6 +109,8 @@ class CrackService(Thread):
                     if invite_count > count:
                         break
                     CrackController.random_sleep(3, 4)
+                    if len(column_name_list) > 1:
+                        CrackController.random_sleep(2, 4)
                     if inviter:
                         if self._inviter_ready_to_begin_team_battle(column_name_list):
                             invite_count += 1
