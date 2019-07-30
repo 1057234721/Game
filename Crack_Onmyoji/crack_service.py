@@ -66,7 +66,7 @@ class CrackService(Thread):
                 CrackController.random_sleep()
         self.any_pages_back_to_home_page()
 
-    def accept_invite(self, acceptor: bool = True, two_members: bool = True, column_name_list: [(str, str)] = None,
+    def accept_invite(self, acceptor: bool = True, column_name_list: [(str, str)] = None,
                       count: int = 10000) -> None:
         # auto_accept_flag = False
         auto_invite_flag = False
@@ -77,6 +77,7 @@ class CrackService(Thread):
                 exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
+                    CrackController.random_sleep()
                 # if not auto_accept_flag:
                 #     exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
                 #     if exist:
@@ -107,14 +108,11 @@ class CrackService(Thread):
                 if template == 'Onmyoji_images\\battle_victory.png':
                     if invite_count > count:
                         break
-                    if two_members:
-                        CrackController.random_sleep(5, 6)
-                    else:
-                        CrackController.random_sleep(3, 4)
+                    CrackController.random_sleep(3, 4)
                     if inviter:
                         if self._inviter_ready_to_begin_team_battle(column_name_list):
                             invite_count += 1
-                            print('--------------invite count', invite_count)
+                            print('--------------invite count-------------------------------------', invite_count)
                         else:
                             self._invite(column_name_list)
                     if acceptor:
@@ -639,11 +637,10 @@ class CrackService(Thread):
         else:
             return False
 
-    def mitama_or_awake_invite(self, mode: str, addition_arg: str, two_members: bool, count: int,
-                               column_name_list: [(str, str)]):
+    def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)], count: int):
         self._invite_friend_to_team(mode, addition_arg, column_name_list)
         CrackController.random_sleep(1.5, 3)
-        self.accept_invite(False, two_members, count)
+        self.accept_invite(False, column_name_list, count)
         self.leave_team()
         self.any_pages_back_to_home_page()
 
