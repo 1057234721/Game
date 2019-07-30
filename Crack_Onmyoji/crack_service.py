@@ -15,6 +15,7 @@ class CrackService(Thread):
         self.onmyoji = onmyoji
 
     def run(self) -> None:
+        self.start_onmyoji()
         while len(self.task_list) != 0:
             current_task = self.task_list.pop(0)
             if len(current_task) == 1:
@@ -27,8 +28,7 @@ class CrackService(Thread):
             CrackController.reboot_player_and_start_app(self.index, GameDetail.game_package_name)
         else:
             CrackController.launch_player_and_start_app(self.index, GameDetail.game_package_name)
-        CrackController.random_sleep(20, 25)
-        CrackController.random_click(self.index, GameDetail.left_up_position, GameDetail.right_down_position)
+        CrackController.random_sleep(10, 15)
         self.any_pages_back_to_home_page()
 
     def is_home_page_or_not(self) -> bool:
