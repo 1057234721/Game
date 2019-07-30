@@ -66,23 +66,27 @@ class CrackService(Thread):
                 CrackController.random_sleep()
         self.any_pages_back_to_home_page()
 
-    def accept_invite(self, acceptor: bool = True, two_members: bool = True, count: int = 10000) -> None:
-        auto_accept_flag = False
+    def accept_invite(self, acceptor: bool = True, two_members: bool = True, column_name_list: [(str, str)] = None,
+                      count: int = 10000) -> None:
+        # auto_accept_flag = False
         auto_invite_flag = False
         inviter = not acceptor
         invite_count = 1
         while True:
             if acceptor:
-                if not auto_accept_flag:
-                    exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
-                    if exist:
-                        if template == 'Onmyoji_images\\team2_invite.png':
-                            auto_accept_flag = True
-                        CrackController.touch(self.index, CrackController.cheat(location))
+                exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                # if not auto_accept_flag:
+                #     exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
+                #     if exist:
+                #         if template == 'Onmyoji_images\\team2_invite.png':
+                #             auto_accept_flag = True
+                #         CrackController.touch(self.index, CrackController.cheat(location))
                 exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
                 if exist:
                     if template == 'Onmyoji_images\\battle_victory.png':
-                        auto_accept_flag = False
+                        # auto_accept_flag = False
                         self.leave_team()
                         continue
             if inviter and not auto_invite_flag:
@@ -104,12 +108,15 @@ class CrackService(Thread):
                     if invite_count > count:
                         break
                     if two_members:
-                        CrackController.random_sleep(10, 12)
+                        CrackController.random_sleep(5, 6)
                     else:
                         CrackController.random_sleep(3, 4)
                     if inviter:
-                        invite_count += 1
-                        print('--------------invite count', invite_count)
+                        if self._inviter_ready_to_begin_team_battle(column_name_list):
+                            invite_count += 1
+                            print('--------------invite count', invite_count)
+                        else:
+                            self._invite(column_name_list)
                     if acceptor:
                         continue
                 CrackController.touch(self.index, CrackController.cheat(location))
@@ -591,30 +598,46 @@ class CrackService(Thread):
         if exist:
             CrackController.touch(self.index, CrackController.cheat(location))
         CrackController.random_sleep(1.5, 3)
-        for column_name in column_name_list:
-            exist, location = CrackController.wait_picture(self.index, 1,
-                                                           CrackController.share_path + 'invite\\invite_icon.png')
-            if exist:
-                CrackController.touch(self.index, CrackController.cheat(location))
-            CrackController.random_sleep(1.5, 3)
-            exist, location = CrackController.wait_picture(self.index, 1,
-                                                           CrackController.share_path + 'invite\\' + column_name[
-                                                               0] + '_column.png')
-            if exist:
-                CrackController.touch(self.index, CrackController.cheat(location))
-            CrackController.random_sleep(1.5, 3)
-            exist, location = CrackController.wait_picture(self.index, 1,
-                                                           CrackController.share_path + 'invite\\name_' +
-                                                           column_name[
-                                                               1] + '.png')
-            if exist:
-                CrackController.touch(self.index, CrackController.cheat(location))
-            CrackController.random_sleep(1.5, 3)
-            exist, location = CrackController.wait_picture(self.index, 1,
-                                                           CrackController.share_path + 'invite\\invite_bar.png')
-            if exist:
-                CrackController.touch(self.index, CrackController.cheat(location))
-            CrackController.random_sleep(12, 15)
+        self._invite(column_name_list)
+
+    def _invite(self, column_name_list: [(str, str)]):
+        while True:
+            for column_name in column_name_list:
+                exist, location = CrackController.wait_picture(self.index, 1,
+                                                               CrackController.share_path + 'invite\\invite_icon.png')
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                CrackController.random_sleep(1.5, 3)
+                exist, location = CrackController.wait_picture(self.index, 1,
+                                                               CrackController.share_path + 'invite\\' + column_name[
+                                                                   0] + '_column.png')
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                CrackController.random_sleep(1.5, 3)
+                exist, location = CrackController.wait_picture(self.index, 1,
+                                                               CrackController.share_path + 'invite\\name_' +
+                                                               column_name[
+                                                                   1] + '.png')
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                CrackController.random_sleep(1.5, 3)
+                exist, location = CrackController.wait_picture(self.index, 1,
+                                                               CrackController.share_path + 'invite\\invite_bar.png')
+                if exist:
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                CrackController.random_sleep(12, 15)
+            if self._inviter_ready_to_begin_team_battle(column_name_list):
+                break
+
+    def _inviter_ready_to_begin_team_battle(self, column_name_list: [(str, str)]):
+        screen = CrackController.screen_shot(self.index)
+        invite_icons = CrackController.find_all_pictures(screen,
+                                                         CrackController.share_path + 'invite\\invite_icon.png',
+                                                         0.95)
+        if invite_icons + len(column_name_list) == 2:
+            return True
+        else:
+            return False
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, two_members: bool, count: int,
                                column_name_list: [(str, str)]):
