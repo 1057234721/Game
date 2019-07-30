@@ -643,7 +643,7 @@ class CrackService(Thread):
         else:
             return False
 
-    def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)], count: int):
+    def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)], count: int = 10000):
         self._invite_friend_to_team(mode, addition_arg, column_name_list)
         CrackController.random_sleep(1.5, 3)
         self.accept_invite(False, column_name_list, count)
