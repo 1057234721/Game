@@ -109,14 +109,17 @@ class CrackService(Thread):
                     if invite_count > count:
                         break
                     CrackController.random_sleep(3, 4)
-                    if len(column_name_list) > 1:
-                        CrackController.random_sleep(2, 4)
                     if inviter:
-                        if self._inviter_ready_to_begin_team_battle(column_name_list):
+                        if len(column_name_list) > 1:
+                            CrackController.random_sleep(4, 6)
+                            if self._inviter_ready_to_begin_team_battle(column_name_list):
+                                invite_count += 1
+                                print('--------------invite count-------------------------------------', invite_count)
+                            else:
+                                self._invite(column_name_list)
+                        else:
                             invite_count += 1
                             print('--------------invite count-------------------------------------', invite_count)
-                        else:
-                            self._invite(column_name_list)
                     if acceptor:
                         continue
                 CrackController.touch(self.index, CrackController.cheat(location))
@@ -633,8 +636,9 @@ class CrackService(Thread):
         screen = CrackController.screen_shot(self.index)
         invite_icons = CrackController.find_all_pictures(screen,
                                                          CrackController.share_path + 'invite\\invite_icon.png',
-                                                         0.95)
-        if invite_icons + len(column_name_list) == 2:
+                                                         0.99)
+        print(invite_icons)
+        if len(invite_icons) + len(column_name_list) == 2:
             return True
         else:
             return False
