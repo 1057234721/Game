@@ -83,7 +83,7 @@ def main():
     c0 = CrackService(0, [['accept_invite']])
     c1 = CrackService(1, [['accept_invite']])
     c2 = CrackService(2,
-                      [['mitama_or_awake_invite', 'mitama', '10', True, [('cross', 'ybymq'), ('cross', 'xgrcey')], 17]])
+                      [['mitama_or_awake_invite', 'mitama', '10', [('cross', 'ybymq'), ('cross', 'xgrcey')], 17]])
     c0.setDaemon(True)
     c1.setDaemon(True)
     c0.start()
@@ -91,7 +91,7 @@ def main():
     c2.start()
     c2.join()
     c2 = CrackService(2,
-                      [['mitama_or_awake_invite', 'awake', 'fire', True, [('cross', 'ybymq'), ('cross', 'xgrcey')], 13
+                      [['mitama_or_awake_invite', 'awake', 'fire', [('cross', 'ybymq'), ('cross', 'xgrcey')], 13
                         ]])
     c2.start()
     # c0.personal_break_through()
