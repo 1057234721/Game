@@ -249,7 +249,7 @@ class CrackService(Thread):
                     print('need to sleep... ', sleep_time)
                     CrackController.random_sleep(sleep_time, sleep_time + 10)
 
-    def solo_mode(self, mode: str, addition_arg: str) -> None:
+    def solo_mode(self, mode: str, addition_arg: str, count: int = 10000) -> None:
         if not self.is_home_page_or_not():
             self.any_pages_back_to_home_page()
         CrackController.random_sleep()
@@ -292,11 +292,15 @@ class CrackService(Thread):
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                 CrackController.random_sleep(1.5, 3)
+        times = 0
         while True:
+            if times > count:
+                break
             exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
             if exist:
                 CrackController.touch(self.index, CrackController.cheat(location))
                 if template == 'Onmyoji_images\\challenge_victory.png':
+                    times += 1
                     if mode == 'mitama':
                         CrackController.random_sleep(20, 30)
                     if mode == 'awake':
