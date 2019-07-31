@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import time
@@ -102,6 +103,7 @@ def main():
     #                   [['mitama_or_awake_invite', 'mitama', '11', [('cross', 'xgrcey')]]])
     # c1.start()
     # c2.start()
+    os.system('shutdown -s -t 60')
 
 
 if __name__ == '__main__':
