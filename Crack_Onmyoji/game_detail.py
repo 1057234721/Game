@@ -1,19 +1,19 @@
 import glob
 
 
-class Onmyoji:
+class GameDetail:
     left_up_position = (0, 0)
     right_down_position = (1280, 720)
-    invite = glob.glob(r'./Onmyoji_images/*_invite.png')
-    victory = glob.glob(r'./Onmyoji_images/*_victory.png')
-    close = glob.glob(r'./Onmyoji_images/*close.png')
-    chapter_battle = glob.glob(r'./Onmyoji_images/*_battle.png')
-    out_of_chapter = glob.glob(r'./Onmyoji_images/*_chapter_flag.png')
+    invite = glob.glob(r'Onmyoji_images\*_invite.png')
+    victory = glob.glob(r'Onmyoji_images\*_victory.png')
+    close = glob.glob(r'Onmyoji_images\*close.png')
+    chapter_battle = glob.glob(r'Onmyoji_images\*_battle.png')
+    out_of_chapter = glob.glob(r'Onmyoji_images\*_chapter_flag.png')
     game_package_name = "com.netease.onmyoji"
     game_video_activity_name = "com.netease.onmyoji/.VideoPlayer"
     player = ["player_master", "player_attendant_one", "player_attendant_two"]
-    champion_class = glob.glob(r'./Onmyoji_images/*class.png')
-    hundred_ghosts = glob.glob(r'./Onmyoji_images/*_hundred_ghosts.png')
+    champion_class = glob.glob(r'Onmyoji_images\*class.png')
+    hundred_ghosts = glob.glob(r'Onmyoji_images\*_hundred_ghosts.png')
     chapter_drag_height = (120, 140)
     chapter_drag_left = (100, 200)
     chapter_drag_right = (1080, 1180)
@@ -32,12 +32,12 @@ class Onmyoji:
     break_through_sleep_right_down = (1125, 561)
     break_through_ticket_left_up = (409, 605)
     break_through_ticket_right_down = (487, 639)
-    hundred_ghosts_choose_king_first_left_up = (220, 450)
-    hundred_ghosts_choose_king_first_right_down = (320, 500)
-    hundred_ghosts_choose_king_second_left_up = (580, 450)
-    hundred_ghosts_choose_king_second_right_down = (680, 500)
-    hundred_ghosts_choose_king_third_left_up = (930, 450)
-    hundred_ghosts_choose_king_third_right_down = (1030, 500)
+    hundred_ghosts_choose_king_first_left_up = (220, 480)
+    hundred_ghosts_choose_king_first_right_down = (320, 520)
+    hundred_ghosts_choose_king_second_left_up = (580, 480)
+    hundred_ghosts_choose_king_second_right_down = (680, 520)
+    hundred_ghosts_choose_king_third_left_up = (930, 480)
+    hundred_ghosts_choose_king_third_right_down = (1030, 520)
     hundred_ghosts_throw_height = (300, 450)
     hundred_ghosts_drag_width = (420, 480)
     hundred_ghosts_drag_height = (0, 720)
@@ -53,10 +53,12 @@ class Onmyoji:
     awake_buff_check_right_down = (893, 176)
     mitama_buff_check_left_up = (768, 200)
     mitama_buff_check_right_down = (896, 244)
+    group_break_through_times_left_up = (269, 545)
+    group_break_through_times_right_down = (330, 585)
 
     @staticmethod
     def get_user_name_by_index(index: int) -> str:
-        return Onmyoji.player[index]
+        return GameDetail.player[index]
 
     def __init__(self):
         self.mitama_battle_count = 0

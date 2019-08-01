@@ -1,6 +1,6 @@
-class ThunderPlayer(object):
+class PlayerDetail(object):
     def __init__(self, info: list):
-        super(ThunderPlayer, self).__init__()
+        super(PlayerDetail, self).__init__()
         self.index = int(info[0])
         self.name = info[1]
         self.top_win_handler = int(info[2])

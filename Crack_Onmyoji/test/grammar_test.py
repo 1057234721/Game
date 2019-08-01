@@ -130,7 +130,7 @@ import configparser
 #
 #
 # speak_word('hello')
-from Crack_Onmyoji.onmyoji import Onmyoji
+from Crack_Onmyoji.game_detail import GameDetail
 
 # old_time = time.time()
 # time.sleep(1)
@@ -141,3 +141,7 @@ from Crack_Onmyoji.onmyoji import Onmyoji
 #     in range(6)]
 # print(throw_pool)
 print(time.strftime("%Y %m %d %H:%M:%S", time.localtime()))
+s = time.time()
+time.sleep(1)
+ss = time.time()
+print(ss - s)
