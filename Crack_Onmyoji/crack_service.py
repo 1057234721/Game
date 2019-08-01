@@ -68,7 +68,6 @@ class CrackService(Thread):
 
     def accept_invite(self, acceptor: bool = True, column_name_list: [(str, str)] = None,
                       count: int = 10000) -> None:
-        # auto_accept_flag = False
         auto_invite_flag = False
         inviter = not acceptor
         invite_count = 1
@@ -78,16 +77,9 @@ class CrackService(Thread):
                 if exist:
                     CrackController.touch(self.index, CrackController.cheat(location))
                     CrackController.random_sleep()
-                # if not auto_accept_flag:
-                #     exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
-                #     if exist:
-                #         if template == 'Onmyoji_images\\team2_invite.png':
-                #             auto_accept_flag = True
-                #         CrackController.touch(self.index, CrackController.cheat(location))
                 exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
                 if exist:
                     if template == 'Onmyoji_images\\battle_victory.png':
-                        # auto_accept_flag = False
                         self.leave_team()
                         continue
             if inviter and not auto_invite_flag:
@@ -110,7 +102,7 @@ class CrackService(Thread):
                         break
                     CrackController.random_sleep(3, 4)
                     if inviter:
-                        if len(column_name_list) > 1:
+                        if len(column_name_list) == 2:
                             CrackController.random_sleep(4, 6)
                             if self._inviter_ready_to_begin_team_battle(column_name_list):
                                 invite_count += 1
@@ -118,8 +110,11 @@ class CrackService(Thread):
                             else:
                                 self._invite(column_name_list)
                         else:
-                            invite_count += 1
-                            print('--------------invite count-------------------------------------', invite_count)
+                            if self._inviter_ready_to_begin_team_battle(column_name_list):
+                                invite_count += 1
+                                print('--------------invite count-------------------------------------', invite_count)
+                            else:
+                                self._invite(column_name_list)
                     if acceptor:
                         continue
                 CrackController.touch(self.index, CrackController.cheat(location))
