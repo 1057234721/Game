@@ -15,7 +15,6 @@ class CrackService(Thread):
         self.onmyoji = onmyoji
 
     def run(self) -> None:
-        self.start_onmyoji()
         while len(self.task_list) != 0:
             current_task = self.task_list.pop(0)
             if len(current_task) == 1:
@@ -73,14 +72,52 @@ class CrackService(Thread):
         invite_count = 1
         while True:
             if acceptor:
-                exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
-                if exist:
-                    CrackController.touch(self.index, CrackController.cheat(location))
-                    CrackController.random_sleep()
-                exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
-                if exist:
-                    if template == 'Onmyoji_images\\battle_victory.png':
-                        self.leave_team()
+                # exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
+                # if exist:
+                #     CrackController.touch(self.index, CrackController.cheat(location))
+                #     CrackController.random_sleep()
+                # exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
+                # if exist:
+                #     if template == 'Onmyoji_images\\battle_victory.png':
+                #         self.leave_team()
+                #         continue
+                screen = CrackController.screen_shot(self.index)
+                _, is_team_leader = CrackController.find_single_picture(screen, CrackController.share_path +
+                                                                        'battle_victory.png')
+                if is_team_leader > 0:
+                    self.leave_team()
+                    continue
+                mitama_location, mitama_invite = CrackController.find_single_picture(screen,
+                                                                                     CrackController.share_path +
+                                                                                     'invite\\mitama_invite.png')
+                awake_location, awake_invite = CrackController.find_single_picture(screen,
+                                                                                   CrackController.share_path +
+                                                                                   'invite\\awake_invite.png')
+                if mitama_invite > 0 or awake_invite > 0:
+                    invite_location_2 = CrackController.find_all_pictures(screen,
+                                                                          CrackController.share_path
+                                                                          + 'team2_invite.png')
+                    if len(invite_location_2) > 0:
+                        CrackController.touch(self.index, CrackController.cheat(invite_location_2[0]))
+                        continue
+                    invite_location_1 = CrackController.find_all_pictures(screen,
+                                                                          CrackController.share_path
+                                                                          + 'team_invite.png')
+                    if len(invite_location_1):
+                        if mitama_invite > 0:
+                            print(self.index, 'mitama_invite...................................................')
+                            to_click = [location for location in invite_location_1 if
+                                        mitama_location[1] in range(location[1], location[1] + 30)]
+                            if len(to_click) > 0:
+                                CrackController.touch(self.index, CrackController.cheat(to_click[0]))
+                                CrackController.random_sleep(2, 3)
+                        if awake_invite > 0:
+                            print(self.index, 'awake_invite:::::::::::::::::::::::::::::::::::::::::::::::::::::')
+                            to_click = [location for location in invite_location_1 if
+                                        awake_location[1] in range(location[1], location[1] + 30)]
+                            if len(to_click) > 0:
+                                CrackController.touch(self.index, CrackController.cheat(to_click[0]))
+                                CrackController.random_sleep(2, 3)
                         continue
             if inviter and not auto_invite_flag:
                 exist, location = CrackController.wait_picture(
