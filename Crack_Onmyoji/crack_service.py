@@ -640,7 +640,12 @@ class CrackService(Thread):
         if len(invite_icons) + len(column_name_list) == 2:
             return True
         else:
-            return False
+            CrackController.random_sleep(2, 3)
+            screen = CrackController.screen_shot(self.index)
+            invite_icons = CrackController.find_all_pictures(screen,
+                                                             CrackController.share_path + 'invite\\invite_icon.png',
+                                                             0.99)
+            return len(invite_icons) + len(column_name_list) == 2
 
     def mitama_or_awake_invite(self, mode: str, addition_arg: str, column_name_list: [(str, str)], count: int = 10000):
         self._invite_friend_to_team(mode, addition_arg, column_name_list)
