@@ -66,12 +66,15 @@ class CrackService(Thread):
         self.any_pages_back_to_home_page()
 
     def accept_invite(self, acceptor: bool = True, column_name_list: [(str, str)] = None,
-                      count: int = 10000) -> None:
+                      count: int = 10000, timer: int = 60 * 60 * 6) -> None:
         auto_invite_flag = False
         inviter = not acceptor
         invite_count = 1
+        accept_time = time.time()
         while True:
             if acceptor:
+                if time.time() - accept_time > timer:
+                    break
                 # exist, location, template = CrackController.check_picture_list(self.index, GameDetail.invite)
                 # if exist:
                 #     CrackController.touch(self.index, CrackController.cheat(location))
@@ -472,7 +475,7 @@ class CrackService(Thread):
                                                        CrackController.share_path + "to_yard_icon.png")
         if exist:
             CrackController.touch(self.index, CrackController.cheat(location))
-        CrackController.random_sleep(1.5, 3)
+        CrackController.random_sleep(2, 3)
         exist, location = CrackController.wait_picture(self.index, 1,
                                                        CrackController.share_path + "hundred_ghosts_flag.png", 0.7)
         if exist:
