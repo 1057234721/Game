@@ -241,19 +241,27 @@ class CrackController:
             CrackController.random_sleep()
         return False
 
-    # use ld_cmd to make screen shot and return the path of the picture, assuming the player is running
+    # use ld_cmd to make screen shot and return the array of the picture, assuming the player is running
     @staticmethod
-    def screen_shot(index: int, sleep_time_low: float = 0.4, sleep_time_high: float = 0.6) -> str:
+    def screen_shot(index: int, sleep_time_low: float = 0.4, sleep_time_high: float = 0.6) -> list:
         CrackController.ld_cmd(index, 'screencap -p /sdcard/Pictures/' + str(index) + 'apk_scr.png')
         CrackController.random_sleep(sleep_time_low, sleep_time_high)
-        return CrackController.share_path + str(index) + 'apk_scr.png'
+        screen = cv2.imread(CrackController.share_path + str(index) + 'apk_scr.png')
+        return screen
+
+    # intercept picture to small picture and return small picture array
+    @staticmethod
+    def intercept_rectangle_from_picture(index: int, left_up: (int, int),
+                                         right_down: (int, int)) -> list:
+        screen = CrackController.screen_shot(index)
+        rectangle = screen[left_up[1]:right_down[1], left_up[0]:right_down[0]]
+        return rectangle
 
     # find the matched picture, assuming the player is running
     @staticmethod
-    def find_all_pictures(screen: str, template: str, threshold: float = 0.85, debug: bool = False) -> \
+    def find_all_pictures(screen_shot: list, template: str, threshold: float = 0.85, debug: bool = False) -> \
             [(int, int, int, int)]:
         locations_to_return = []
-        screen_shot = cv2.imread(screen)
         template_picture = CrackController.templates_dict.get(template)
         result = cv2.matchTemplate(screen_shot, template_picture, cv2.TM_CCOEFF_NORMED)
         locations = numpy.where(result >= threshold)
@@ -291,9 +299,8 @@ class CrackController:
 
     # find the matched picture, assuming the player is running
     @staticmethod
-    def find_single_picture(screen: str, template: str, threshold: float = 0.85, debug: bool = False) -> \
+    def find_single_picture(screen_shot: list, template: str, threshold: float = 0.85, debug: bool = False) -> \
             ((int, int, int, int), float):
-        screen_shot = cv2.imread(screen)
         template_picture = CrackController.templates_dict.get(template)
         result = cv2.matchTemplate(screen_shot, template_picture, cv2.TM_CCOEFF_NORMED)
         minimum_value, maximum_value, minimum_value_location, maximum_value_location = cv2.minMaxLoc(result)
@@ -364,13 +371,13 @@ class CrackController:
 
     # fetch the number (str) from the picture by using the api, must be png format
     @staticmethod
-    def fetch_number_from_picture(path: str) -> str:
+    def fetch_number_from_picture(picture: list) -> str:
         url = "https://aip.baidubce.com/rest/2.0/ocr/v1/numbers?access_token=" + CrackController.api
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
         data = {
-            'image': base64.b64encode(cv2.imencode('.png', cv2.imread(path))[1]).decode(),
+            'image': base64.b64encode(cv2.imencode('.png', picture)[1]).decode(),
         }
         response = requests.post(url, data=data, headers=headers)
         result = json.loads(response.text)
@@ -381,13 +388,13 @@ class CrackController:
 
     # fetch the string (str) from the picture by using the api, must be png format
     @staticmethod
-    def fetch_string_from_picture(path: str) -> str:
+    def fetch_string_from_picture(picture: list) -> str:
         url = "https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + CrackController.api
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
         data = {
-            'image': base64.b64encode(cv2.imencode('.png', cv2.imread(path))[1]).decode(),
+            'image': base64.b64encode(cv2.imencode('.png', picture)[1]).decode(),
         }
         response = requests.post(url, data=data, headers=headers)
         result = json.loads(response.text)
@@ -395,17 +402,6 @@ class CrackController:
             return result["words_result"]
         except IndexError:
             return ''
-
-    # fetch the number (str) from the picture by using the api, must be png format
-    @staticmethod
-    def intercept_rectangle_from_picture(index: int, left_up: (int, int),
-                                         right_down: (int, int)) -> str:
-        path = CrackController.screen_shot(index)
-        image = cv2.imread(path)
-        rectangle = image[left_up[1]:right_down[1], left_up[0]:right_down[0]]
-        save_path_name = CrackController.share_path + str(index) + "intercepted_picture.png"
-        cv2.imwrite(save_path_name, rectangle)
-        return save_path_name
 
     # given a rectangle and click in it randomly, assuming the player is running
     @staticmethod
