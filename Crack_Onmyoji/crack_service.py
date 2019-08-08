@@ -160,8 +160,7 @@ class CrackService(Thread):
                 CrackController.touch(self.index, CrackController.cheat(location))
 
     def personal_break_through(self) -> None:
-        if not self.is_home_page_or_not():
-            self.any_pages_back_to_home_page()
+        self.any_pages_back_to_home_page()
         CrackController.random_sleep()
         CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
                                      GameDetail.home_page_explore_right_down)
@@ -285,8 +284,7 @@ class CrackService(Thread):
                     CrackController.random_sleep(sleep_time, sleep_time + 10)
 
     def solo_mode(self, mode: str, addition_arg: str, count: int = 10000) -> None:
-        if not self.is_home_page_or_not():
-            self.any_pages_back_to_home_page()
+        self.any_pages_back_to_home_page()
         CrackController.random_sleep()
         CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
                                      GameDetail.home_page_explore_right_down)
@@ -420,8 +418,7 @@ class CrackService(Thread):
             drag_time = random.randint(1000, 2000)
             CrackController.swipe(self.index, (right, height), (left, height), drag_time)
 
-        if not self.is_home_page_or_not():
-            self.any_pages_back_to_home_page()
+        self.any_pages_back_to_home_page()
         CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
                                      GameDetail.home_page_explore_right_down)
         CrackController.random_sleep(1.5, 3)
@@ -469,8 +466,7 @@ class CrackService(Thread):
             self.any_pages_back_to_home_page()
 
     def hundred_ghosts(self, count: int) -> None:
-        if not self.is_home_page_or_not():
-            self.any_pages_back_to_home_page()
+        self.any_pages_back_to_home_page()
         exist, location = CrackController.wait_picture(self.index, 1,
                                                        CrackController.share_path + "to_yard_icon.png")
         if exist:
@@ -550,8 +546,7 @@ class CrackService(Thread):
         self.any_pages_back_to_home_page()
 
     def open_close_buff(self, buff_type: str, buff_option: bool) -> None:
-        if not self.is_home_page_or_not():
-            self.any_pages_back_to_home_page()
+        self.any_pages_back_to_home_page()
         exist, location = CrackController.wait_picture(self.index, 1,
                                                        CrackController.share_path + "bonus.png")
         if exist:
@@ -584,8 +579,7 @@ class CrackService(Thread):
             return False
 
     def _invite_friend_to_team(self, mode: str, addition_arg: str, column_name_list: [(str, str)]):
-        if not self.is_home_page_or_not():
-            self.any_pages_back_to_home_page()
+        self.any_pages_back_to_home_page()
         CrackController.random_sleep()
         CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
                                      GameDetail.home_page_explore_right_down)
@@ -695,8 +689,7 @@ class CrackService(Thread):
         self.any_pages_back_to_home_page()
 
     def group_break_through(self):
-        if not self.is_home_page_or_not():
-            self.any_pages_back_to_home_page()
+        self.any_pages_back_to_home_page()
         CrackController.random_sleep()
         CrackController.random_click(self.index, GameDetail.home_page_explore_left_up,
                                      GameDetail.home_page_explore_right_down)
@@ -720,6 +713,60 @@ class CrackService(Thread):
                 CrackController.touch(self.index, CrackController.cheat(location))
             exist, location = CrackController.wait_picture(self.index, 1, CrackController.share_path +
                                                            'group_break_through_flag.png')
+            if exist:
+                exist, location = CrackController.wait_picture(self.index, 1,
+                                                               CrackController.share_path +
+                                                               'group_break_through_target.png')
+                if exist:
+                    not_exist_times = 0
+                    CrackController.touch(self.index, CrackController.cheat(location))
+                    CrackController.random_sleep()
+                    exist, _ = CrackController.wait_picture(self.index, 1, CrackController.share_path +
+                                                            'group_tickets_not_enough.png')
+                    if exist:
+                        break
+                    exist, location = CrackController.wait_picture(self.index, 1,
+                                                                   CrackController.share_path +
+                                                                   'attack_star.png')
+                    if exist:
+                        CrackController.touch(self.index, CrackController.cheat(location))
+                else:
+                    scroll = True
+                    not_exist_times += 1
+            if scroll:
+                exist, location = CrackController.wait_picture(self.index, 2,
+                                                               CrackController.share_path +
+                                                               'group_break_through_scroll.png')
+                if exist:
+                    flag = random.uniform(self.index, 1) > 0.75
+                    CrackController.swipe(0, location[:2],
+                                          (location[0], location[1] - 120 if flag else location[1] + 120),
+                                          1800)
+                    scroll = False
+            if not_exist_times >= 5:
+                break
+        self.any_pages_back_to_home_page()
+
+    def auto_activity_line_up(self, count: int = 1, interval: int = 60 * 60 * 2):
+        self.any_pages_back_to_home_page()
+        CrackController.random_sleep()
+        exist, location = CrackController.wait_picture(self.index, 2,
+                                                       CrackController.share_path + 'open_scroll.png')
+        if exist:
+            CrackController.touch(self.index, CrackController.cheat(location))
+        CrackController.random_sleep()
+        exist, location = CrackController.wait_picture(self.index, 2,
+                                                       CrackController.share_path + 'all_teams_icon.png')
+        if exist:
+            CrackController.touch(self.index, CrackController.cheat(location))
+        CrackController.random_sleep(2, 3)
+        times = 0
+        while True:
+            exist, location, template = CrackController.check_picture_list(self.index, GameDetail.victory)
+            if exist:
+                CrackController.touch(self.index, CrackController.cheat(location))
+            exist, location = CrackController.wait_picture(self.index, 1, CrackController.share_path +
+                                                           'activity_team.png')
             if exist:
                 exist, location = CrackController.wait_picture(self.index, 1,
                                                                CrackController.share_path +
